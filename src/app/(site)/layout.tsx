@@ -4,10 +4,11 @@ import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { ChatWidget } from '@/components/ChatWidget';
 import { SmoothScroll } from '@/components/SmoothScroll';
+import { PreviewBanner } from '@/components/PreviewBanner';
 import { StructuredData } from '@/components/StructuredData';
 import { METADATA, SITE_CONFIG } from '@/config';
-import '../styles/globals.css';
-import '../styles/site.css';
+import '../../styles/globals.css';
+import '../../styles/site.css';
 
 // Inter as the fallback under SF Pro (Apple devices): light 400 headlines, 400/500 text, as on the first site
 // Geist: the home hero headline only (semibold)
@@ -61,6 +62,7 @@ export default function RootLayout({
         {/* The header is fixed; main starts under it (the home hero pulls itself back up to sit beneath it) */}
         <main id="main" className="pt-[var(--nav)]">{children}</main>
         <Footer />
+        <PreviewBanner />
         <ChatWidget />
         <SmoothScroll />
       </body>

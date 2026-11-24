@@ -2,11 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { TIERS, type Tier } from '@/config';
+import { TIERS, type Tier, type Unit } from '@/config';
 import { ProductCard } from '@/components/ProductCard';
 import { ArrowRightIcon } from '@/components/Icons';
-import { ALL_PRODUCTS, TIER_ORDER, priceOf, sizeOf, warrantyShort } from '@/lib/products';
-import { formatINR } from '@/lib/whatsapp';
+import { gradeName, sizeOf, TIER_ORDER, unitMemory, unitName, warrantyShort } from '@/lib/unit-helpers';
+import { formatINR, waLink } from '@/lib/whatsapp';
 
 type Sort = 'low' | 'high';
 
@@ -27,7 +27,7 @@ function Segmented<T extends string>({ label, value, options, onChange }: {
   );
 }
 
-export default function ProductsPage() {
+export function ProductsView({ units, total }: { units: Unit[]; total: number }) {
   const [grade, setGrade] = useState<Tier | null>(null);
   const [size, setSize] = useState<string | null>(null);
   const [chip, setChip] = useState<string | null>(null);
@@ -36,8 +36,8 @@ export default function ProductsPage() {
   const sheetRef = useRef<HTMLDialogElement>(null);
   const [q, setQ] = useState('');
 
-  const sizes = useMemo(() => [...new Set(ALL_PRODUCTS.map(sizeOf).filter(Boolean))].sort(), []);
-  const chips = useMemo(() => [...new Set(ALL_PRODUCTS.map((p) => p.chip))], []);
+  const sizes = useMemo(() => [...new Set(units.map(sizeOf))].sort(), [units]);
+  const chips = useMemo(() => [...new Set(units.map((u) => u.chip))], [units]);
 
   // Filters live in the URL so a filtered view can be shared from an ad or a chat
   useEffect(() => {
@@ -59,22 +59,23 @@ export default function ProductsPage() {
     window.history.replaceState(null, '', qs ? `?${qs}` : window.location.pathname);
   }, [ready, grade, size, chip]);
 
-  const list = ALL_PRODUCTS
-    .filter((p) => q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => [p.name, p.chip, ...p.specs].join(' ').toLowerCase().includes(w)))
-    .filter((p) => (!grade || (p.tiers[grade]?.price ?? null) !== null) && (!size || sizeOf(p) === size) && (!chip || p.chip === chip))
-    .sort((a, b) => (sort === 'low' ? priceOf(a) - priceOf(b) : priceOf(b) - priceOf(a)));
+  const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+  const list = units
+    .filter((u) => words.every((w) => [unitName(u), u.chip, unitMemory(u), sizeOf(u), gradeName(u.grade), u.headline ?? ''].join(' ').toLowerCase().includes(w)))
+    .filter((u) => (!grade || u.grade === grade) && (!size || sizeOf(u) === size) && (!chip || u.chip === chip))
+    .sort((a, b) => (sort === 'low' ? a.price - b.price : b.price - a.price));
 
   const active = [grade, size, chip].filter((v) => v !== null).length;
   const filtered = active > 0 || q !== '';
   const reset = () => { setGrade(null); setSize(null); setChip(null); setQ(''); };
-  const from = Math.min(...ALL_PRODUCTS.map(priceOf));
+  const from = units.length ? Math.min(...units.map((u) => u.price)) : null;
 
   return (
     <>
       <section className="pt-7 sm:pt-20 pb-5 sm:pb-8">
         <div className="wrap grid gap-2 sm:gap-4">
           <h1 className="t-h1 !text-[clamp(32px,3vw+22px,64px)]">Shop MacBook</h1>
-          <p className="lead max-sm:!text-[15px]">Certified pre-owned MacBook Pro models from {formatINR(from)}. Every price includes the warranty of its grade and our 5-year service plan.</p>
+          <p className="lead max-sm:!text-[15px]">{from !== null ? <>Certified pre-owned MacBooks from {formatINR(from)}. </> : null}Every price includes the warranty of its grade and our 5-year service plan.</p>
           <div className="relative max-w-[520px] mt-2 sm:mt-4">
             <label htmlFor="shop-search" className="sr-only">Search MacBooks</label>
             <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute left-5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--muted)]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
@@ -164,14 +165,21 @@ export default function ProductsPage() {
 
           {list.length > 0 ? (
             <ul className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
-              {list.map((p) => <li key={p.id}><ProductCard {...p} /></li>)}
+              {list.map((u, i) => <li key={u.id}><ProductCard unit={u} priority={i < 2} /></li>)}
             </ul>
+          ) : units.length === 0 ? (
+            <div className="py-20 grid gap-4 justify-items-start">
+              <p className="t-h3">New MacBooks are being listed.</p>
+              <p className="lead max-w-[48ch]">Tell us the model or budget you have in mind and we will message you when a match arrives.</p>
+              <a href={waLink('Hi, I am looking for a MacBook. ')} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Message us</a>
+            </div>
           ) : (
             <div className="py-20 grid gap-4 justify-items-start">
               <p className="t-h3">No MacBook matches these filters.</p>
               <button type="button" onClick={reset} className="btn btn--secondary">Clear filters</button>
             </div>
           )}
+          {total > units.length && <p className="mt-8 text-[14px] text-[var(--ink-soft)]">Showing the newest {units.length} of {total}. Message us for anything not listed.</p>}
         </div>
       </section>
 

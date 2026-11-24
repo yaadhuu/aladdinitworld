@@ -1,6 +1,10 @@
 import { SITE_CONFIG } from '@/config';
 import { ArrowRightIcon, GoogleIcon } from '@/components/Icons';
 import { waLink } from '@/lib/whatsapp';
+import { getReviews } from '@/lib/reviews';
+
+// Static, rebuilt in the background about every 60 seconds
+export const revalidate = 60;
 
 // TODO(owner): replace with the real Google reviews link from the Business Profile
 // (Google Business Profile → "Get more reviews" → share link).
@@ -19,8 +23,9 @@ function Stars({ n }: { n: number }) {
   );
 }
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
   const { rating, reviews } = SITE_CONFIG.stats;
+  const list = await getReviews();
   return (
     <>
       <section className="pt-10 sm:pt-20 pb-10 sm:pb-14">
@@ -46,14 +51,14 @@ export default function ReviewsPage() {
 
       <section aria-label="Customer reviews" className="py-10 sm:py-20 bg-[var(--surface)]">
         <ul className="wrap columns-1 md:columns-2 lg:columns-3 gap-4 sm:gap-5">
-          {SITE_CONFIG.customerReviews.map((r) => (
-            <li key={r.name} className="break-inside-avoid mb-4 sm:mb-5">
+          {list.map((r) => (
+            <li key={r.name + r.text.slice(0, 12)} className="break-inside-avoid mb-4 sm:mb-5">
               <figure className="card p-6 sm:p-7 gap-4">
                 <Stars n={r.rating} />
                 <blockquote className="text-[16px] leading-[1.6] text-[var(--ink)]">&ldquo;{r.text}&rdquo;</blockquote>
                 <figcaption className="pt-4 border-t border-[var(--line)] text-[14px]">
                   <span className="font-medium">{r.name}</span>
-                  <span className="text-[var(--muted)]"> · {r.role}, {r.source}</span>
+                  <span className="text-[var(--muted)]"> · {[r.role, r.source].filter(Boolean).join(', ')}</span>
                 </figcaption>
               </figure>
             </li>

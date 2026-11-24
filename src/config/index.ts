@@ -143,25 +143,6 @@ export const WARRANTY_TERMS = {
   },
 };
 
-// ─── PRODUCT TYPES ────────────────────────────────────────────────────────────
-export type TierMedia = {
-  price: number | null;
-  images?: string[];
-  video?: string;
-};
-
-export type Product = {
-  id: string;
-  name: string;
-  category: string;
-  chip: string;
-  specs: string[];
-  images: string[];
-  video?: string;
-  hasRealPhotos?: boolean; // set false (or omit) to show "Coming Soon" poster instead of images[]
-  tiers: Partial<Record<Tier, TierMedia>>;
-};
-
 // ─── SITE CONFIG ──────────────────────────────────────────────────────────────
 export const SITE_CONFIG = {
   name: "Aladdin IT World",
@@ -197,107 +178,6 @@ export const SITE_CONFIG = {
     { label: "B2B",           href: "/b2b" },
     { label: "Contact",       href: "/contact" },
   ],
-
-  products: [
-    {
-      id: "macbook-pro-i7",
-      name: "MacBook Pro A2141 i7",
-      category: "MacBook Pro",
-      chip: "Intel i7",
-      specs: ["16GB RAM", "512GB SSD", "16\" Retina Display", "5.5GB Graphics"],
-      images: [
-        "https://res.cloudinary.com/dabmrbpit/image/upload/v1781378268/IMG_0940_rvpgdn.jpg",
-      ],
-      hasRealPhotos: false,
-      tiers: {
-        certified: { price: 41999 },
-      },
-    },
-    {
-      id: "macbook-pro-i9",
-      name: "MacBook Pro A2141 i9",
-      category: "MacBook Pro",
-      chip: "Intel i9",
-      specs: ["16GB RAM", "1TB SSD", "16\" Liquid Retina Display", "5.5GB Graphics"],
-      images: [
-        "https://res.cloudinary.com/dabmrbpit/image/upload/v1781378268/IMG_0940_rvpgdn.jpg",
-      ],
-      hasRealPhotos: false,
-      tiers: {
-        certified: { price: 49999 },
-      },
-    },
-    {
-      id: "macbook-pro-m1-pro-14-16gb",
-      name: "MacBook Pro M1 Pro 14\"",
-      category: "MacBook Pro",
-      chip: "Apple M1 Pro",
-      specs: ["16GB RAM", "512GB SSD", "14.2\" Retina Display", "120Hz ProMotion"],
-      images: [
-        "https://res.cloudinary.com/dmzx7yiyd/image/upload/v1782070003/20260614_132632.jpg_nol6pd.jpg",
-      ],
-      hasRealPhotos: true,
-      tiers: {
-        certified: { price: 74999 },
-      },
-    },
-    {
-      id: "macbook-pro-m1-pro-14-32gb",
-      name: "MacBook Pro M1 Pro 14\"",
-      category: "MacBook Pro",
-      chip: "Apple M1 Pro",
-      specs: ["32GB RAM", "512GB SSD", "14\" Liquid Retina XDR", "120Hz ProMotion"],
-      images: [
-        "https://res.cloudinary.com/dmzx7yiyd/image/upload/v1782069884/20260614_132317.jpg_poea9m.jpg",
-      ],
-      hasRealPhotos: true,
-      tiers: {
-        refurb: { price: 79999 },
-      },
-    },
-    {
-      id: "macbook-pro-m2-pro-14-16gb",
-      name: "MacBook Pro M2 Pro 14\"",
-      category: "MacBook Pro",
-      chip: "Apple M2 Pro",
-      specs: ["16GB RAM", "512GB SSD", "14.2\" Retina Display", "120Hz ProMotion"],
-      images: [
-        "https://res.cloudinary.com/dabmrbpit/image/upload/v1781378268/IMG_0940_rvpgdn.jpg",
-      ],
-      hasRealPhotos: false, // was using M1 Pro 32GB's photo — set to true once you have a real M2 Pro photo
-      tiers: {
-        certified: { price: 97999 },
-      },
-    },
-    {
-      id: "macbook-pro-m1-pro-16-16gb",
-      name: "MacBook Pro M1 Pro 16\"",
-      category: "MacBook Pro",
-      chip: "Apple M1 Pro",
-      specs: ["16GB RAM", "512GB SSD", "16\" Retina Display", "120Hz ProMotion"],
-      images: [
-        "https://res.cloudinary.com/dabmrbpit/image/upload/v1781378268/IMG_0940_rvpgdn.jpg",
-      ],
-      hasRealPhotos: false,
-      tiers: {
-        certified: { price: 81999 },
-      },
-    },
-    {
-      id: "macbook-pro-m1-pro-16-32gb",
-      name: "MacBook Pro M1 Pro 16\"",
-      category: "MacBook Pro",
-      chip: "Apple M1 Pro",
-      specs: ["32GB RAM", "1TB SSD", "16\" Retina Display", "120Hz ProMotion"],
-      images: [
-        "https://res.cloudinary.com/dabmrbpit/image/upload/v1781378268/IMG_0940_rvpgdn.jpg",
-      ],
-      hasRealPhotos: false,
-      tiers: {
-        certified: { price: 94999 },
-      },
-    },
-  ] as Product[],
 
   features: [
     {
@@ -456,3 +336,50 @@ export const METADATA = {
     "pre-owned Apple devices India",
   ],
 };
+
+// ─── UNITS (one per physical MacBook) ─────────────────────────────────────────
+export type UnitStatus = "available" | "reserved" | "sold";
+export type UnitPhoto = { src: string; width: number; height: number };
+
+export type Unit = {
+  id: string; // 8 characters; the last 8 of the Sanity document id
+  model: string; // "MacBook Pro"
+  screen: number; // 14
+  chip: string; // "Apple M1 Pro"
+  ram: number; // GB
+  storage: string; // "512GB"
+  year: number | null;
+  grade: Tier;
+  battery: number | null;
+  cosmetic: string | null;
+  included: string[];
+  price: number;
+  headline: string | null; // optional short line shown with the name
+  originalPrice: number | null; // the price before an offer, shown crossed out
+  status: UnitStatus;
+  featured: boolean;
+  photos: UnitPhoto[];
+  description: string;
+  createdAt: string;
+};
+
+// FALLBACK SNAPSHOT: shown only when the CMS cannot be reached. Today's stock as of 2026-11-25.
+// Refresh it when stock changes a lot, or a sold unit could reappear during an outage.
+const CLOUD = "https://res.cloudinary.com";
+const unitBase = { year: null, originalPrice: null as number | null, headline: null as string | null, battery: null, cosmetic: null, included: [] as string[], description: "", status: "available" as UnitStatus, createdAt: "2026-11-25T00:00:00Z" };
+export const FALLBACK_UNITS: Unit[] = [
+  { ...unitBase, id: "snap0001", model: "MacBook Pro", screen: 14, chip: "Apple M1 Pro", ram: 16, storage: "512GB", grade: "certified", price: 74999, featured: true,
+    photos: [{ src: `${CLOUD}/dmzx7yiyd/image/upload/v1782070003/20260614_132632.jpg_nol6pd.jpg`, width: 1600, height: 1200 }] },
+  { ...unitBase, id: "snap0002", model: "MacBook Pro", screen: 14, chip: "Apple M1 Pro", ram: 32, storage: "512GB", grade: "refurb", price: 79999, featured: false,
+    photos: [{ src: `${CLOUD}/dmzx7yiyd/image/upload/v1782069884/20260614_132317.jpg_poea9m.jpg`, width: 1600, height: 1200 }] },
+  { ...unitBase, id: "snap0003", model: "MacBook Pro", screen: 14, chip: "Apple M2 Pro", ram: 16, storage: "512GB", grade: "certified", price: 97999, featured: true,
+    photos: [{ src: "/img/standin-apple-silicon-2.jpg", width: 1960, height: 1308 }] },
+  { ...unitBase, id: "snap0004", model: "MacBook Pro", screen: 16, chip: "Apple M1 Pro", ram: 16, storage: "512GB", grade: "certified", price: 81999, featured: false,
+    photos: [{ src: "/img/standin-apple-silicon.jpg", width: 1960, height: 1308 }] },
+  { ...unitBase, id: "snap0005", model: "MacBook Pro", screen: 16, chip: "Apple M1 Pro", ram: 32, storage: "1TB", grade: "certified", price: 94999, featured: false,
+    photos: [{ src: "/img/standin-apple-silicon-3.jpg", width: 1960, height: 1308 }] },
+  { ...unitBase, id: "snap0006", model: "MacBook Pro", screen: 16, chip: "Intel Core i7", ram: 16, storage: "512GB", grade: "certified", price: 41999, featured: true,
+    photos: [{ src: "/img/standin-intel.jpg", width: 1200, height: 800 }] },
+  { ...unitBase, id: "snap0007", model: "MacBook Pro", screen: 16, chip: "Intel Core i9", ram: 16, storage: "1TB", grade: "certified", price: 49999, featured: false,
+    photos: [{ src: "/img/standin-intel-2.jpg", width: 2000, height: 1333 }] },
+];

@@ -13,15 +13,16 @@ import { ReviewMarquee } from '@/components/home/ReviewMarquee';
 import { FaqSearch } from '@/components/home/FaqSearch';
 import ScrollHero, { type MediaSet } from '@/components/ScrollHero';
 import { waLink } from '@/lib/whatsapp';
-import { ALL_PRODUCTS } from '@/lib/products';
+import { getCount, getFeatured } from '@/lib/products';
+import { getFaqs } from '@/lib/faq';
+import { getReviews } from '@/lib/reviews';
 
 const PHOTOS = {
   exchange: '/img/home/impact.jpg', // Unsplash 1602080858428-57174f9431cf
 };
 
-// Three models with three different pictures: the client's own unit, Intel, the newest Apple silicon
-const FEATURED_IDS = ['macbook-pro-m1-pro-14-16gb', 'macbook-pro-i7', 'macbook-pro-m2-pro-14-16gb'];
-const featured = FEATURED_IDS.map((id) => ALL_PRODUCTS.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => !!p);
+// Static, rebuilt in the background about every 60 seconds
+export const revalidate = 60;
 
 // Frame folders under /public/hero, with the scrub-ready videos (tier 1). The last frames (the closed pair turning) are cut:
 // videos trimmed to 84 frames, frame counts set to match (originals in _backup-hero-v2).
@@ -29,8 +30,9 @@ const HERO_MOBILE: MediaSet = { basePath: '/hero/m', count: 27, width: 720, heig
 const HERO_DESKTOP: MediaSet = { basePath: '/hero/d', count: 43, width: 1280, height: 582, video: '/hero/video/hero-d.mp4' };
 
 
-export default function Home() {
+export default async function Home() {
   const { showroom } = SITE_CONFIG;
+  const [featured, count, faqs, reviews] = await Promise.all([getFeatured(), getCount(), getFaqs(), getReviews()]);
   return (
     <>
       {/* ── Hero: one dark scene, the MacBooks close as you scroll (ScrollHero: video, frames or poster) ── */}
@@ -60,25 +62,27 @@ export default function Home() {
         </ScrollHero>
       </div>
 
-      {/* ── MacBooks in stock ── */}
+      {/* ── MacBooks in stock: up to 6 featured units from the CMS ── */}
+      {featured.length > 0 && (
       <section id="stock" className="py-14 sm:py-28 bg-[var(--surface)]">
         <div className="wrap">
           <div className="sec-head lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8 grid gap-3">
-              <h2 className="t-h2">MacBook Pro models in stock</h2>
+              <h2 className="t-h2">MacBooks in stock</h2>
               <p className="lead">Every price includes the warranty of its grade and our 5-year service plan.</p>
             </div>
             <Link href="/products" className="link lg:col-span-4 lg:justify-self-end">
-              See all {ALL_PRODUCTS.length} MacBooks
+              See all {count} MacBooks
               <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
           {/* Phone: a swipe row of store tiles; wider: a grid */}
           <ul className="max-sm:flex max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory max-sm:-mx-[var(--gut)] max-sm:px-[var(--gut)] max-sm:scroll-px-[var(--gut)] max-sm:[scrollbar-width:none] gap-3 sm:grid sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p, i) => <li key={p.id} className={`max-sm:w-[46%] max-sm:flex-none max-sm:snap-start ${i === 2 ? 'sm:max-lg:hidden' : ''}`}><ProductCard {...p} /></li>)}
+            {featured.map((u, i) => <li key={u.id} className={`max-sm:w-[46%] max-sm:flex-none max-sm:snap-start ${i >= 4 ? 'sm:max-lg:hidden' : ''}`}><ProductCard unit={u} /></li>)}
           </ul>
         </div>
       </section>
+      )}
 
       {/* ── Exchange, with the e-waste figures it leads to ── */}
       <section id="exchange" className="py-14 sm:py-28">
@@ -126,7 +130,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="wrap"><ReviewMarquee reviews={SITE_CONFIG.customerReviews} /></div>
+        <div className="wrap"><ReviewMarquee reviews={reviews} /></div>
         <div className="wrap mt-10 sm:mt-14 pt-8 border-t border-[var(--line)] grid gap-3 lg:flex lg:items-center lg:justify-between">
           <p className="text-[19px] font-medium tracking-[-0.01em]">Need help choosing?</p>
           <div className="flex flex-wrap gap-x-7 gap-y-1">
@@ -137,7 +141,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Questions ── */}
+      {/* ── Questions (from the CMS; hidden when there are none) ── */}
+      {faqs.length > 0 && (
       <section id="faq" className="py-14 sm:py-28 scroll-mt-[var(--nav)]">
         <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-4 grid gap-3 content-start">
@@ -145,10 +150,11 @@ export default function Home() {
             <p className="lead">Warranty, EMI, exchange and delivery. Search below, or ask the assistant anything else.</p>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
-            <FaqSearch items={SITE_CONFIG.faqItems} limit={6} />
+            <FaqSearch items={faqs} limit={6} />
           </div>
         </div>
       </section>
+      )}
     </>
   );
 }
