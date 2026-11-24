@@ -12,8 +12,8 @@ const config: Config = {
     extend: {
       fontFamily: {
         // SF Pro where the buyer is on Apple hardware; Geist (a close, neutral grotesk) everywhere else
-        sans: ["-apple-system", "BlinkMacSystemFont", '"SF Pro Text"', "var(--font-geist)", ...defaultTheme.fontFamily.sans],
-        display: ["-apple-system", "BlinkMacSystemFont", '"SF Pro Display"', "var(--font-geist)", ...defaultTheme.fontFamily.sans],
+        sans: ["-apple-system", "BlinkMacSystemFont", '"SF Pro Text"', "var(--font-inter)", ...defaultTheme.fontFamily.sans],
+        display: ["-apple-system", "BlinkMacSystemFont", '"SF Pro Display"', "var(--font-inter)", ...defaultTheme.fontFamily.sans],
       },
       colors: {
         "brand-dark": "#0A0A0A",

@@ -3,6 +3,7 @@ import { SITE_CONFIG, BUSINESS_HOURS } from '@/config';
 import { ArrowRightIcon, InstagramIcon, MailIcon, WhatsAppIcon } from '@/components/Icons';
 import { Wordmark } from '@/components/Navigation';
 import { ChatButton } from '@/components/ChatButton';
+import { FooterClose } from '@/components/FooterClose';
 import { MAIN_ACTION, waLink } from '@/lib/whatsapp';
 
 const columns = [
@@ -31,23 +32,25 @@ export function Footer() {
   const { showroom } = SITE_CONFIG;
   return (
     <footer id="contact" className="bg-[var(--surface)] text-[var(--ink)]">
-      <div className="wrap pt-20 sm:pt-[var(--padt)] pb-8">
-        {/* Close */}
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end pb-14 sm:pb-20 border-b border-[var(--line)]">
-          <div className="lg:col-span-7 grid gap-4">
-            <h2 className="t-h2">Need help choosing a MacBook?</h2>
-            <p className="lead">Message our team with the model you want or your budget. We reply with live photos and the battery report.</p>
+      <div className="wrap pt-12 sm:pt-20 pb-6 sm:pb-8">
+        {/* Close (not on the home page, which has its own Need help section) */}
+        <FooterClose>
+          <div className="grid gap-5 sm:gap-8 lg:grid-cols-12 lg:items-end pb-10 sm:pb-16 mb-10 sm:mb-14 border-b border-[var(--line)]">
+            <div className="lg:col-span-7 grid gap-2 sm:gap-4">
+              <h2 className="t-h2">Need help choosing a MacBook?</h2>
+              <p className="lead">Message our team with the model you want or your budget. We reply with live photos and the battery report.</p>
+            </div>
+            <div className="lg:col-span-5 lg:justify-self-end btn-row">
+              <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--primary">
+                {MAIN_ACTION} on WhatsApp
+              </a>
+              <ChatButton>Ask in chat</ChatButton>
+            </div>
           </div>
-          <div className="lg:col-span-5 lg:justify-self-end btn-row">
-            <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--primary">
-              {MAIN_ACTION} on WhatsApp
-            </a>
-            <ChatButton>Ask in chat</ChatButton>
-          </div>
-        </div>
+        </FooterClose>
 
         {/* Directory */}
-        <div className="grid gap-x-6 gap-y-10 pt-14 grid-cols-2 lg:grid-cols-12">
+        <div className="grid gap-x-6 gap-y-8 sm:gap-y-10 grid-cols-2 lg:grid-cols-12">
           <div className="col-span-2 lg:col-span-4 grid gap-4 content-start">
             <Link href="/" aria-label="Aladdin IT World, home" className="justify-self-start">
               <Wordmark />
@@ -105,12 +108,12 @@ export function Footer() {
         </div>
 
         {/* Legal row */}
-        <div className="mt-14 pt-6 border-t border-[var(--line)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[13px] text-[var(--ink-soft)]">
+        <div className="mt-10 sm:mt-14 pt-5 border-t border-[var(--line)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[13px] text-[var(--ink-soft)]">
           <p>&copy; {year} Aladdin IT World</p>
           <div className="flex flex-wrap gap-x-6">
             <Link href="/privacy" className="link">Privacy</Link>
             <Link href="/terms" className="link">Terms</Link>
-            <span className="inline-flex items-center min-h-[44px]">Photographs via Apple and Unsplash</span>
+            <span className="inline-flex items-center min-h-[44px]">Photographs via Unsplash</span>
           </div>
         </div>
       </div>

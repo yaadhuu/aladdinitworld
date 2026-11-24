@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { MAIN_ACTION, waLink } from '@/lib/whatsapp';
 
@@ -19,7 +20,7 @@ export function Wordmark({ className = '' }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`} translate="no">
       <Image src="/logo.png" alt="" width={517} height={256} priority className="h-7 sm:h-8 w-auto flex-none" />
-      <span className="text-[17px] sm:text-[18px] font-semibold leading-none tracking-[-0.02em] whitespace-nowrap">Aladdin IT World</span>
+      <span className="text-[16px] sm:text-[18px] font-medium leading-none tracking-[-0.02em] whitespace-nowrap">Aladdin IT World</span>
     </span>
   );
 }
@@ -28,8 +29,20 @@ export function Navigation() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname.startsWith(href);
 
+  // On the home page the header floats over the dark hero with light text, then turns white
+  const [dark, setDark] = useState(false);
+  useEffect(() => {
+    const hero = pathname === '/' ? document.getElementById('hero') : null;
+    if (!hero) { setDark(false); return; }
+    const check = () => setDark(hero.getBoundingClientRect().bottom > 72);
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => { window.removeEventListener('scroll', check); window.removeEventListener('resize', check); };
+  }, [pathname]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-[rgba(255,255,255,0.88)] backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]">
+    <header data-dark={dark} className="site-header fixed inset-x-0 top-0 z-50 bg-[rgba(255,255,255,0.88)] backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]">
       <div className="wrap h-[var(--nav)] flex items-center justify-between gap-6">
         <Link href="/" aria-label="Aladdin IT World, home" className="text-[var(--ink)]">
           <Wordmark />
@@ -53,7 +66,7 @@ export function Navigation() {
           })}
         </nav>
 
-        <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--sm">
+        <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--secondary btn--sm">
           {MAIN_ACTION}
           <span className="sr-only"> on WhatsApp</span>
         </a>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -10,8 +10,8 @@ import { METADATA, SITE_CONFIG } from '@/config';
 import '../styles/globals.css';
 import '../styles/site.css';
 
-// Geist (taste skill product pairing list): precise and calm, display 400, text 400/500
-const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-geist' });
+// Inter as the fallback under SF Pro (Apple devices): light 400 headlines, 400/500 text, as on the first site
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
@@ -48,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={geist.variable} suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <StructuredData />
         {/* The site is light only: a premium retail page keeps one grade (taste skill: dark pages are for tech) */}

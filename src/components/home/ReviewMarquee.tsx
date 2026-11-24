@@ -20,13 +20,13 @@ function Card({ r, hidden }: { r: Review; hidden?: boolean }) {
   return (
     <figure
       aria-hidden={hidden || undefined}
-      className="w-[300px] sm:w-[400px] flex-none flex flex-col gap-5 p-7 sm:p-8 rounded-[var(--r-lg)] bg-[var(--surface)]"
+      className="w-[272px] sm:w-[400px] flex-none flex flex-col gap-4 p-5 sm:p-8 rounded-[var(--r-lg)] bg-[var(--surface)]"
     >
       <Stars n={r.rating} />
-      <blockquote className="text-[17px] leading-[1.6] text-[var(--ink)] line-clamp-5 flex-1">
+      <blockquote className="text-[15px] sm:text-[17px] leading-[1.55] text-[var(--ink)] line-clamp-5 flex-1">
         &ldquo;{r.text}&rdquo;
       </blockquote>
-      <figcaption className="text-[15px]">
+      <figcaption className="text-[13px] sm:text-[15px]">
         <span className="font-medium">{r.name}</span>
         <span className="text-[var(--muted)]"> · {r.role}, {r.source}</span>
       </figcaption>

@@ -34,16 +34,16 @@
   --r-lg: 22px;
   --r-md: 14px;
   --r-sm: 8px;
-  --btn-h: 44px;
+  --btn-h: 42px;
 
-  --t-h1: clamp(40px, 3.2vw + 26px, 76px);
-  --t-h2: clamp(30px, 1.5vw + 24px, 48px);
-  --t-h3: clamp(21px, 0.4vw + 19px, 26px);
-  --t-lead: clamp(17px, 0.25vw + 16px, 21px);
+  --t-h1: clamp(34px, 3.2vw + 22px, 72px);
+  --t-h2: clamp(26px, 1.5vw + 20px, 44px);
+  --t-h3: clamp(19px, 0.4vw + 17px, 24px);
+  --t-lead: clamp(15px, 0.3vw + 14px, 20px);
   --t-stat: clamp(28px, 0.9vw + 24px, 38px);
 }
 @media (max-width: 1023px) { :root { --gut: 40px; --padt: 96px; } }
-@media (max-width: 639px) { :root { --nav: 56px; --padt: 80px; --padb: 48px; --gut: 20px; } }
+@media (max-width: 639px) { :root { --nav: 52px; --padt: 56px; --padb: 40px; --gut: 20px; --btn-h: 40px; } }
 
 html {
   -webkit-text-size-adjust: 100%;
@@ -78,12 +78,12 @@ a, button, [role="button"], summary, label, select {
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 
-/* Retail type: semibold headlines with optical tracking (SF Pro on Apple devices, Geist elsewhere) */
+/* Retail type: semibold headlines with optical tracking (SF Pro on Apple devices, Inter elsewhere); light 400 headlines */
 body { letter-spacing: -0.01em; }
-h1 { letter-spacing: -0.03em; line-height: 1.05; font-weight: 600; }
-h2 { letter-spacing: -0.025em; line-height: 1.1; font-weight: 600; }
-h3 { letter-spacing: -0.015em; line-height: 1.25; font-weight: 600; }
-h1.font-bold, h2.font-bold, h3.font-bold { font-weight: 600; }
+h1 { letter-spacing: -0.035em; line-height: 1.04; font-weight: 400; }
+h2 { letter-spacing: -0.025em; line-height: 1.1; font-weight: 400; }
+h3 { letter-spacing: -0.015em; line-height: 1.25; font-weight: 500; }
+h1.font-bold, h2.font-bold { font-weight: 400; } h3.font-bold { font-weight: 500; }
 
 /* Tabular numbers for prices and counts */
 .tabular { font-variant-numeric: tabular-nums; }

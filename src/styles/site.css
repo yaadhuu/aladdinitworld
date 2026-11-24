@@ -18,10 +18,10 @@
 .sec--inverse .lead { color: var(--inv-muted); }
 
 /* ── Type ── */
-.t-h1 { font-size: var(--t-h1); line-height: 1.04; letter-spacing: -0.032em; font-weight: 600; }
-.t-h2 { font-size: var(--t-h2); line-height: 1.08; letter-spacing: -0.026em; font-weight: 600; max-width: 22ch; }
-.t-h3 { font-size: var(--t-h3); line-height: 1.2; letter-spacing: -0.018em; font-weight: 600; }
-.t-card { font-size: 19px; line-height: 1.3; letter-spacing: -0.015em; font-weight: 600; }
+.t-h1 { font-size: var(--t-h1); line-height: 1.04; letter-spacing: -0.032em; font-weight: 400; }
+.t-h2 { font-size: var(--t-h2); line-height: 1.08; letter-spacing: -0.026em; font-weight: 400; max-width: 22ch; }
+.t-h3 { font-size: var(--t-h3); line-height: 1.2; letter-spacing: -0.018em; font-weight: 400; }
+.t-card { font-size: 17px; line-height: 1.3; letter-spacing: -0.015em; font-weight: 500; }
 .h2 .muted, .t-h2 .muted { color: var(--muted); }
 /* Text people read stays near ink (7:1); --muted is for labels and a heading's grey half only */
 .lead { font-size: var(--t-lead); line-height: 1.5; color: var(--ink-soft); max-width: 46ch; }
@@ -39,16 +39,17 @@
 .btn {
   align-items: center; justify-content: center; gap: 8px;
   height: var(--btn-h); padding: 0 22px; border-radius: 999px;
-  font-size: 15px; font-weight: 500; line-height: 1; letter-spacing: -0.005em; white-space: nowrap;
+  font-size: 14px; font-weight: 500; line-height: 1; letter-spacing: -0.005em; white-space: nowrap; position: relative;
   border: 1px solid transparent;
   transition: transform 160ms var(--ease-out), background-color 200ms ease, border-color 200ms ease, color 200ms ease;
 }
 .btn:active { transform: scale(0.97); transition-duration: 100ms; }
 .btn--primary { background: var(--ink); color: #fff; }
-.btn--secondary { background: transparent; color: var(--ink); border-color: rgba(0, 0, 0, 0.18); }
+.btn::before { content: ""; position: absolute; inset: -3px 0; } /* 46px hit area on a 40px pill */
+.btn--secondary { background: transparent; color: var(--ink); border-color: rgba(0, 0, 0, 0.16); }
 .on-inverse .btn--primary { background: #fff; color: #000; }
 .on-inverse .btn--secondary { color: var(--inv-ink); border-color: rgba(255, 255, 255, 0.3); }
-.btn--sm { height: 36px; padding: 0 16px; font-size: 14px; }
+.btn--sm { height: 34px; padding: 0 14px; font-size: 13px; }
 .btn .btn__arrow { transition: transform 200ms var(--ease-out); }
 @media (hover: hover) and (pointer: fine) {
   .btn--primary:hover { background: #3a3a3c; }
@@ -57,8 +58,8 @@
   .on-inverse .btn--secondary:hover { border-color: #fff; }
   .btn:hover .btn__arrow { transform: translateX(2px); }
 }
-.btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
-@media (max-width: 639px) { .btn-row { flex-direction: column; } .btn-row .btn { width: 100%; } }
+.btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+@media (max-width: 639px) { .btn-row { gap: 8px; } }
 
 /* Text link: an underline that draws on hover */
 :where(.link) { display: inline-flex; }
@@ -119,6 +120,25 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
   border: 1px solid var(--line) !important; background-color: #fff !important; color: var(--ink) !important;
 }
 
+.select.select--sm { height: 34px; padding: 0 30px 0 12px !important; font-size: 13px; background-position: right 8px center !important; }
+
+/* ── Shop: phone toolbar chips and the filter sheet ── */
+.chip-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-block: 12px; }
+.chip-row::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: #fff; font-size: 14px; font-weight: 500; color: var(--ink); white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease, transform 120ms var(--ease-out);
+}
+.chip:active { transform: scale(0.97); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.sheet { margin: auto 0 0; width: 100%; max-width: 100%; max-height: 86svh; padding: 0; border: 0; border-radius: 20px 20px 0 0; background: #fff; color: var(--ink); }
+.sheet::backdrop { background: rgba(0, 0, 0, 0.4); }
+.sheet[open] { display: flex; flex-direction: column; animation: sheet-in 320ms cubic-bezier(0.32, 0.72, 0, 1); }
+.sheet[open]::backdrop { animation: fade-in 320ms ease; }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+@keyframes fade-in { from { opacity: 0; } }
+
 /* Spec and price rows: a 1px rule closing each row */
 .rows { display: grid; }
 .rows > * { border-bottom: 1px solid var(--line); }
@@ -142,13 +162,55 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
 .marquee:hover .marquee__track, .marquee[data-paused="true"] .marquee__track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translate3d(calc(-50% - var(--gap) / 2), 0, 0); } }
 
-/* ── Photo chapters (the page's dealt moment) ── */
-.chapters { position: relative; }
-.chapters__stage { position: sticky; top: var(--nav); height: calc(100svh - var(--nav)); display: flex; flex-direction: column; padding: 48px 0 var(--padb); }
-.chapters__frame { position: relative; flex: 1; min-height: 0; border-radius: var(--r-lg); overflow: hidden; background: var(--inv-surface); }
-.chapters__pic { position: absolute; inset: 0; will-change: clip-path; }
-.chapters__pic img { transform-origin: 50% 60%; }
-.chapters__panel { position: absolute; left: 24px; bottom: 24px; width: min(440px, calc(100% - 48px)); padding: 28px 32px; border-radius: var(--r-md); background: var(--inv-bg); color: var(--inv-ink); }
+/* ── Home hero: one dark scene ──
+   The laptops (ScrollHero media) are the background; the headline and buttons are real HTML on top.
+   Ground #0A0A0A, warm white #F5F2EA, body #B9B5AB, gold #C9A84C only for button hover. */
+.hero2 { --h-bg: #0A0A0A; --h-ink: #F5F2EA; --h-body: #CFCBC2; --h-gold: #C9A84C; margin-top: calc(-1 * var(--nav)); color: var(--h-ink); }
+/* Phone: the laptops fill the lower part, fading up into the dark where the text sits */
+.hero2 .hero-media { top: auto; bottom: 0; left: 0; width: 100%; height: 62%; object-fit: cover; object-position: 50% 45%;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 30%); mask-image: linear-gradient(180deg, transparent 0, #000 30%); }
+.hero2__scrim { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(0deg, var(--h-bg) 0, rgba(10, 10, 10, 0.86) 22%, rgba(10, 10, 10, 0) 48%); }
+.hero2__inner { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: space-between;
+  padding: calc(var(--nav) + 30px) 0 calc(var(--tabbar) + 22px); }
+.hero2__head { display: grid; gap: 16px; justify-items: start; }
+.hero2 h1 { font-size: clamp(42px, 12vw, 56px); font-weight: 400; line-height: 1.04; letter-spacing: -0.03em; color: var(--h-ink); max-width: 11ch; }
+.hero2__lead { font-size: 17px; line-height: 1.5; color: var(--h-body); max-width: 34ch; letter-spacing: -0.005em; font-weight: 400; }
+.hero2__foot { display: grid; gap: 14px; justify-items: start; }
+.hero2 .btn { height: 46px; padding: 0 26px; font-size: 15px; }
+.hero2 .btn--primary { background: var(--h-ink); color: var(--h-bg); }
+.hero2 .btn--secondary { background: transparent; color: var(--h-ink); border-color: rgba(245, 242, 234, 0.3); }
+@media (hover: hover) and (pointer: fine) {
+  .hero2 .btn--primary:hover { background: var(--h-gold); }
+  .hero2 .btn--secondary:hover { border-color: var(--h-gold); }
+}
+/* The text lifts and fades as the hero scrolls away (where the browser supports scroll timelines) */
+/* opacity only: no transform, so the text stays sharp while it fades */
+@keyframes hero2-out { to { opacity: 0; } }
+@supports (animation-timeline: scroll()) {
+  .hero2__head, .hero2__foot { animation: hero2-out linear both; animation-timeline: scroll(root block); animation-range: 0 55svh; }
+}
+@media (min-width: 640px) {
+  .hero2 h1 { font-size: clamp(56px, 8.4vw, 84px); max-width: 12ch; }
+  .hero2__lead { font-size: 19px; }
+}
+@media (min-width: 1024px) {
+  /* The box takes the footage's own shape (1280x582), centred, and every edge fades into the ground */
+  .hero2 .hero-media { top: 50%; bottom: auto; left: auto; right: 0; width: 74%; height: auto; aspect-ratio: 1280 / 582; object-fit: cover; transform: translateY(-46%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 36%, #000 94%, transparent 100%), linear-gradient(180deg, transparent 0, #000 20%, #000 80%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 36%, #000 94%, transparent 100%), linear-gradient(180deg, transparent 0, #000 20%, #000 80%, transparent 100%);
+    -webkit-mask-composite: source-in; mask-composite: intersect; }
+  .hero2__scrim { background: linear-gradient(90deg, var(--h-bg) 0, rgba(10, 10, 10, 0.9) 30%, rgba(10, 10, 10, 0) 56%); }
+  .hero2__inner { justify-content: center; gap: 36px; padding: var(--nav) 0 0; }
+  .hero2__inner > * { max-width: 44%; }
+  .hero2 h1 { font-size: clamp(64px, 5.8vw, 92px); max-width: 10ch; }
+}
+@media (prefers-reduced-motion: reduce) { .hero2__head, .hero2__foot { animation: none; } }
+
+/* Header over the dark hero: light text, no bar; it turns white once the hero has passed */
+.site-header { transition: background-color 280ms ease, border-color 280ms ease; }
+.site-header[data-dark="true"] { --ink: #F5F2EA; --ink-soft: #B9B5AB; --line: rgba(245, 242, 234, 0.16); background-color: transparent !important; border-color: transparent !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.site-header[data-dark="true"] .btn--secondary { border-color: rgba(245, 242, 234, 0.3); }
 
 /* ── Bottom tab bar (under 1024px) ── */
 :root { --tabbar: 0px; }
@@ -210,5 +272,6 @@ html.lenis, html.lenis body { height: auto; }
   .marquee__track { animation: none; flex-wrap: wrap; width: auto; }
   .marquee { -webkit-mask-image: none; mask-image: none; }
   .marquee [aria-hidden="true"] { display: none; }
-  .chapters__stage { position: static; height: auto; }
+  .sheet[open], .sheet[open]::backdrop { animation: none; }
 }
+

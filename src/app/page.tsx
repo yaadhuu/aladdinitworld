@@ -1,7 +1,7 @@
 /*
   Home. Visual thesis: the MacBook on black, then a calm white and grey retail store around it.
   Gold lives only in the lamp mark. One primary action per screen.
-  Hero: Apple Newsroom M5 Pro image (owner's choice). Exchange photo: Unsplash stand-in.
+  Hero: the owner's 30-frame render of two MacBooks closing, scrubbed by scroll. Exchange photo: Unsplash stand-in.
 */
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,18 +11,22 @@ import { ProductCard } from '@/components/ProductCard';
 import { ChatButton } from '@/components/ChatButton';
 import { ReviewMarquee } from '@/components/home/ReviewMarquee';
 import { FaqSearch } from '@/components/home/FaqSearch';
-import { formatINR, waLink } from '@/lib/whatsapp';
-import { ALL_PRODUCTS, priceOf } from '@/lib/products';
+import ScrollHero, { type MediaSet } from '@/components/ScrollHero';
+import { waLink } from '@/lib/whatsapp';
+import { ALL_PRODUCTS } from '@/lib/products';
 
 const PHOTOS = {
-  hero: '/img/home/hero-m5-pro.jpg', // Apple Newsroom, MacBook Pro M5 Pro / M5 Max, March 2026
   exchange: '/img/home/impact.jpg', // Unsplash 1602080858428-57174f9431cf
 };
 
-const fromPrice = Math.min(...ALL_PRODUCTS.map(priceOf));
 // Three models with three different pictures: the client's own unit, Intel, the newest Apple silicon
 const FEATURED_IDS = ['macbook-pro-m1-pro-14-16gb', 'macbook-pro-i7', 'macbook-pro-m2-pro-14-16gb'];
 const featured = FEATURED_IDS.map((id) => ALL_PRODUCTS.find((p) => p.id === id)).filter((p): p is NonNullable<typeof p> => !!p);
+
+// Frame folders under /public/hero, with the scrub-ready videos (tier 1). The last frames (the closed pair turning) are cut:
+// videos trimmed to 84 frames, frame counts set to match (originals in _backup-hero-v2).
+const HERO_MOBILE: MediaSet = { basePath: '/hero/m', count: 27, width: 720, height: 900, video: '/hero/video/hero-m.mp4' };
+const HERO_DESKTOP: MediaSet = { basePath: '/hero/d', count: 43, width: 1280, height: 582, video: '/hero/video/hero-d.mp4' };
 
 const lineIcon = 'w-5 h-5 flex-none text-[var(--ink)]';
 const ChatLine = () => (
@@ -33,42 +37,35 @@ export default function Home() {
   const { showroom } = SITE_CONFIG;
   return (
     <>
-      {/* ── Hero: the product on black ── */}
-      <section className="on-inverse relative bg-black text-[var(--inv-ink)] overflow-hidden -mt-[var(--nav)] pt-[var(--nav)] min-h-[100svh] lg:h-[100svh] lg:min-h-[740px] flex flex-col">
-        <div className="wrap pt-10 sm:pt-14 lg:pt-12 grid gap-6 lg:grid-cols-12 lg:items-end" data-enter>
-          <h1 className="t-h1 lg:col-span-7 max-w-[12ch] lg:max-w-[15ch]">Certified pre&#8209;owned MacBooks</h1>
-          <div className="lg:col-span-5 grid gap-6 lg:pb-2">
-            <p className="text-[17px] sm:text-[19px] leading-[1.5] text-[var(--inv-muted)] max-w-[40ch]">
-              Inspected and graded in Koduvally, Kerala. From <span className="text-[var(--inv-ink)]">{formatINR(fromPrice)}</span>, with up to 6 months&rsquo; warranty and delivery anywhere in India.
-            </p>
-            <div className="btn-row">
-              <Link href="/products" className="btn btn--primary">Shop MacBooks</Link>
-              <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--secondary">Talk to a specialist</a>
+      {/* ── Hero: one dark scene, the MacBooks close as you scroll (ScrollHero: video, frames or poster) ── */}
+      <div id="hero">
+        <ScrollHero
+          mobile={HERO_MOBILE}
+          desktop={HERO_DESKTOP}
+          alt="Two Space Black MacBook Pro laptops, open"
+          scrollRange={0.7}
+          className="hero2 min-h-[100svh]"
+          mediaClassName="hero-media"
+        >
+          <div className="hero2__scrim" aria-hidden="true" />
+          <div className="wrap hero2__inner">
+            <div className="hero2__head" data-enter>
+              <h1>Certified pre&#8209;owned MacBooks</h1>
+              {/* TODO(owner): warranty, "100+ point inspection" and "5-year service plan" are not confirmed, so they are left out of the hero */}
+              <p className="hero2__lead">Inspected and graded in Kerala. Delivered across India.</p>
+            </div>
+            <div className="hero2__foot">
+              <div className="btn-row">
+                <Link href="/products" className="btn btn--primary">Shop MacBooks</Link>
+                <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--secondary">Ask a specialist</a>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="relative flex-1 min-h-[240px] sm:min-h-[420px] mt-8 lg:mt-4" data-enter-photo>
-          <Image src={PHOTOS.hero} alt="MacBook Pro with M5 Pro, open, seen from the front" fill priority sizes="100vw" className="object-contain object-bottom" />
-        </div>
-
-        <dl className="wrap hidden sm:grid grid-cols-4 gap-6 py-7 border-t border-[var(--inv-line)]">
-          {[
-            ['100+ point inspection', 'on every MacBook'],
-            ['5-year service plan', 'free service charges'],
-            ['EMI available', `above ${formatINR(50000)}`],
-            [`${SITE_CONFIG.stats.rating} on Google`, `${SITE_CONFIG.stats.reviews} reviews`],
-          ].map(([t, d]) => (
-            <div key={t}>
-              <dt className="text-[15px] font-medium">{t}</dt>
-              <dd className="text-[14px] text-[var(--inv-muted)]">{d}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
+        </ScrollHero>
+      </div>
 
       {/* ── MacBooks in stock ── */}
-      <section id="stock" className="py-20 sm:py-28 bg-[var(--surface)]">
+      <section id="stock" className="py-14 sm:py-28 bg-[var(--surface)]">
         <div className="wrap">
           <div className="sec-head lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8 grid gap-3">
@@ -80,14 +77,15 @@ export default function Home() {
               <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p, i) => <li key={p.id} className={i === 2 ? 'sm:max-lg:hidden' : ''}><ProductCard {...p} /></li>)}
+          {/* Phone: a swipe row of store tiles; wider: a grid */}
+          <ul className="max-sm:flex max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory max-sm:-mx-[var(--gut)] max-sm:px-[var(--gut)] max-sm:scroll-px-[var(--gut)] max-sm:[scrollbar-width:none] gap-3 sm:grid sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((p, i) => <li key={p.id} className={`max-sm:w-[46%] max-sm:flex-none max-sm:snap-start ${i === 2 ? 'sm:max-lg:hidden' : ''}`}><ProductCard {...p} /></li>)}
           </ul>
         </div>
       </section>
 
       {/* ── Exchange and e-waste ── */}
-      <section id="exchange" className="py-20 sm:py-28">
+      <section id="exchange" className="py-14 sm:py-28">
         <div className="wrap grid gap-6 lg:grid-cols-12">
           <div className="on-inverse lg:col-span-7 card !bg-black text-[var(--inv-ink)]">
             <div className="photo !rounded-none aspect-[16/9]">
@@ -118,7 +116,7 @@ export default function Home() {
       </section>
 
       {/* ── Need help: contact routes and questions ── */}
-      <section id="faq" className="py-20 sm:py-28 bg-[var(--surface)] scroll-mt-[var(--nav)]">
+      <section id="faq" className="py-14 sm:py-28 bg-[var(--surface)] scroll-mt-[var(--nav)]">
         <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-4 grid gap-6 content-start">
             <div className="grid gap-3">
@@ -129,7 +127,7 @@ export default function Home() {
               <li className="border-b border-[var(--line)]">
                 <a href={waLink()} target="_blank" rel="noopener noreferrer" className="help-row"><ChatLine /><span className="flex-1">Message us on WhatsApp</span><ArrowRightIcon className="w-4 h-4" /></a>
               </li>
-              <li className="border-b border-[var(--line)]">
+              <li className="border-b border-[var(--line)] max-lg:hidden">
                 <ChatButton className="help-row w-full text-left"><ChatLine /><span className="flex-1">Ask in chat</span><ArrowRightIcon className="w-4 h-4" /></ChatButton>
               </li>
               <li className="border-b border-[var(--line)]">
@@ -147,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* ── Reviews ── */}
-      <section id="reviews" className="py-20 sm:py-28">
+      <section id="reviews" className="py-14 sm:py-28">
         <div className="wrap">
           <div className="sec-head lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7 grid gap-3">
