@@ -57,14 +57,45 @@ ${EXTRA_NOTES.length ? `\nOwner notes:\n${EXTRA_NOTES.map((n) => `- ${n}`).join(
 
 const SYSTEM = buildSystemPrompt();
 
-// shortcut: in-memory rate limit per server instance; move to a shared store (e.g. Redis) when deployed on several instances.
+// shortcut: in-memory limits per server instance; move to a shared store (e.g. Upstash Redis) when deployed on several instances.
+const WINDOW = 10 * 60_000;
+const PER_IP = 30; // requests per visitor per 10 minutes
+const GLOBAL_PER_HOUR = 600; // spend guard: all visitors together, per instance
+const MAX_KEYS = 5000;
 const hits = new Map<string, number[]>();
+let globalHits: number[] = [];
+
 function limited(ip: string) {
   const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < 10 * 60_000);
+  globalHits = globalHits.filter((t) => now - t < 60 * 60_000);
+  if (globalHits.length >= GLOBAL_PER_HOUR) return true;
+  // Evict stale visitors so the map cannot grow without bound
+  if (hits.size > MAX_KEYS) {
+    for (const [k, ts] of hits) if (!ts.length || now - ts[ts.length - 1] >= WINDOW) hits.delete(k);
+    if (hits.size > MAX_KEYS) hits.clear();
+  }
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW);
+  if (recent.length >= PER_IP) { hits.set(ip, recent); return true; }
   recent.push(now);
   hits.set(ip, recent);
-  return recent.length > 30;
+  globalHits.push(now);
+  return false;
+}
+
+// Client IP from the proxy, not the client: x-real-ip (set by Vercel and most proxies),
+// else the rightmost x-forwarded-for hop, which the nearest proxy appended.
+function clientIp(req: Request) {
+  const real = req.headers.get('x-real-ip')?.trim();
+  if (real) return real;
+  const hops = req.headers.get('x-forwarded-for')?.split(',').map((h) => h.trim()).filter(Boolean);
+  return hops?.length ? hops[hops.length - 1] : 'local';
+}
+
+// Only this site's own pages may call the assistant
+function sameOrigin(req: Request) {
+  const origin = req.headers.get('origin');
+  if (!origin) return false;
+  try { return new URL(origin).host === (req.headers.get('x-forwarded-host') ?? req.headers.get('host')); } catch { return false; }
 }
 
 type Turn = { role: 'user' | 'assistant'; content: string };
@@ -86,8 +117,8 @@ export async function POST(req: Request) {
   if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_AUTH_TOKEN) {
     return Response.json({ error: 'not_configured' }, { status: 503 });
   }
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'local';
-  if (limited(ip)) return Response.json({ error: 'rate_limited' }, { status: 429 });
+  if (!sameOrigin(req)) return Response.json({ error: 'forbidden' }, { status: 403 });
+  if (limited(clientIp(req))) return Response.json({ error: 'rate_limited' }, { status: 429 });
 
   let body: unknown;
   try { body = await req.json(); } catch { return Response.json({ error: 'bad_request' }, { status: 400 }); }
