@@ -75,7 +75,8 @@ function limited(ip: string) {
     if (hits.size > MAX_KEYS) hits.clear();
   }
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW);
-  if (recent.length >= PER_IP) { hits.set(ip, recent); return true; }
+  // one visitor can never use more than a fifth of the hourly budget; the shared 'direct' bucket gets 4x
+  if (recent.length >= (ip === 'direct' ? PER_IP * 4 : PER_IP)) { hits.set(ip, recent); return true; }
   recent.push(now);
   hits.set(ip, recent);
   globalHits.push(now);
@@ -84,11 +85,16 @@ function limited(ip: string) {
 
 // Client IP from the proxy, not the client: x-real-ip (set by Vercel and most proxies),
 // else the rightmost x-forwarded-for hop, which the nearest proxy appended.
+// The headers are trusted only behind a proxy that overwrites them: Vercel (sets VERCEL) or set TRUSTED_PROXY=1.
+// Anywhere else a visitor could fake them to dodge the per-visitor limit or fill the shared cap, so
+// all callers share one stricter-in-total bucket ('direct') instead.
+const TRUST_PROXY = !!process.env.VERCEL || process.env.TRUSTED_PROXY === '1';
 function clientIp(req: Request) {
+  if (!TRUST_PROXY) return 'direct';
   const real = req.headers.get('x-real-ip')?.trim();
   if (real) return real;
   const hops = req.headers.get('x-forwarded-for')?.split(',').map((h) => h.trim()).filter(Boolean);
-  return hops?.length ? hops[hops.length - 1] : 'local';
+  return hops?.length ? hops[hops.length - 1] : 'direct';
 }
 
 // Only this site's own pages may call the assistant
