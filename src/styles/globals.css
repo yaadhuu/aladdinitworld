@@ -1,0 +1,340 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fonts are loaded with next/font in layout.tsx (no render-blocking @import). */
+
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  /* Darker gold for text on white backgrounds (passes WCAG AA, #C9A84C does not) */
+  --gold-ink: #7A5C0B;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ── Design system v3: monochrome retail. Colour comes from the MacBooks and the photographs;
+     the brand gold lives only in the lamp mark and the selected-state hairline. ── */
+  --bg: #ffffff;
+  --surface: #f5f5f7;
+  --ink: #1d1d1f;
+  --ink-soft: #424245;
+  --muted: #6e6e73;
+  --accent: #a9812e;
+  --accent-ink: #ffffff;
+  --inv-bg: #000000;
+  --inv-surface: #1d1d1f;
+  --inv-ink: #f5f5f7;
+  --inv-muted: #a1a1a6;
+  --line: rgba(0, 0, 0, 0.1);
+  --inv-line: rgba(255, 255, 255, 0.16);
+
+  --nav: 64px;
+  --padt: 120px;
+  --padb: 72px;
+  --gut: 80px;
+  --r-lg: 22px;
+  --r-md: 14px;
+  --r-sm: 8px;
+  --btn-h: 44px;
+
+  --t-h1: clamp(40px, 3.2vw + 26px, 76px);
+  --t-h2: clamp(30px, 1.5vw + 24px, 48px);
+  --t-h3: clamp(21px, 0.4vw + 19px, 26px);
+  --t-lead: clamp(17px, 0.25vw + 16px, 21px);
+  --t-stat: clamp(28px, 0.9vw + 24px, 38px);
+}
+@media (max-width: 1023px) { :root { --gut: 40px; --padt: 96px; } }
+@media (max-width: 639px) { :root { --nav: 56px; --padt: 80px; --padb: 48px; --gut: 20px; } }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--bg);
+  color: var(--ink);
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.dark {
+  background-color: #0A0A0A;
+  color: #F5F5F5;
+  color-scheme: dark;
+}
+
+/* Interactive elements: no double-tap zoom delay on phones */
+a, button, [role="button"], summary, label, select {
+  touch-action: manipulation;
+}
+
+/* Headings: balanced line breaks, no orphan words */
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Retail type: semibold headlines with optical tracking (SF Pro on Apple devices, Geist elsewhere) */
+body { letter-spacing: -0.01em; }
+h1 { letter-spacing: -0.03em; line-height: 1.05; font-weight: 600; }
+h2 { letter-spacing: -0.025em; line-height: 1.1; font-weight: 600; }
+h3 { letter-spacing: -0.015em; line-height: 1.25; font-weight: 600; }
+h1.font-bold, h2.font-bold, h3.font-bold { font-weight: 600; }
+
+/* Tabular numbers for prices and counts */
+.tabular { font-variant-numeric: tabular-nums; }
+
+::selection { background-color: #d6e4f5; color: var(--ink); }
+
+/* Keyboard focus: a 2px ring in the action colour, shown at once, never animated */
+:focus-visible { outline: 2px solid #0071e3; outline-offset: 3px; }
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: #0A0A0A;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: top 0.2s var(--ease-out);
+}
+.skip-link:focus { top: 1rem; }
+
+/* ───────── Gold text that stays readable on white ───────── */
+html:not(.dark) .text-accent,
+html:not(.dark) .hover\:text-accent:hover,
+html:not(.dark) .group:hover .group-hover\:text-accent { color: var(--gold-ink); }
+html:not(.dark) .gradient-text {
+  background: linear-gradient(135deg, #8A6A10 0%, #B8932F 50%, #8A6A10 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Always-black sections keep the bright gold even in light mode */
+html:not(.dark) .on-dark .text-accent,
+html:not(.dark) .on-dark .eyebrow { color: var(--gold); }
+html:not(.dark) .on-dark .gradient-text {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+html.dark .eyebrow { color: var(--gold); }
+/* Eyebrow on always-black sections */
+.eyebrow-on-dark { color: var(--gold); }
+
+@layer components {
+  /* Explicit transition lists (never `transition: all`) */
+  .t-ui {
+    transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  /* Apple-style pill buttons: no lift on hover, instant press feedback */
+  .btn-gold {
+    @apply t-ui inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[17px] font-semibold text-black;
+    background: linear-gradient(180deg, #E8C96A, #C9A84C);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset, 0 4px 14px -6px rgba(201, 168, 76, 0.55);
+  }
+  .btn-gold:active { transform: scale(0.97); transition-duration: 100ms; }
+
+  .btn-outline {
+    @apply t-ui inline-flex items-center justify-center gap-2 rounded-full border px-7 py-3.5 text-[17px] font-semibold;
+    border-color: var(--gold-ink);
+    color: var(--gold-ink);
+  }
+  html.dark .btn-outline { border-color: var(--gold); color: var(--gold); }
+  .btn-outline:active { transform: scale(0.97); transition-duration: 100ms; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-gold:hover { filter: brightness(1.05); box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 8px 22px -8px rgba(201,168,76,.7); }
+    .btn-outline:hover { background-color: rgba(201, 168, 76, 0.1); }
+  }
+  /* Outline button placed on an always-black section */
+  .btn-outline-dark { border-color: var(--gold); color: #fff; }
+  .btn-outline-dark:hover { background-color: rgba(255, 255, 255, 0.08); }
+
+  .card-lift {
+    @apply t-ui;
+    transition-duration: 300ms;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-lift:hover { transform: translateY(-3px); box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.18); }
+    html.dark .card-lift:hover { box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7); }
+  }
+  .card-lift:active { transform: scale(0.99); }
+}
+
+/* Translucent chrome (nav): content scrolls under a frosted layer */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+html.dark .glass {
+  background: rgba(22, 22, 23, 0.72);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass { background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  html.dark .glass { background: #161617; }
+}
+
+.glass-sm {
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+}
+html.dark .glass-sm {
+  background: rgba(10, 10, 10, 0.7);
+  border: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-shimmer {
+  background: linear-gradient(105deg, #0A0A0A 0%, #0A0A0A 30%, #C9A84C 50%, #0A0A0A 70%, #0A0A0A 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+.premium-badge {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium;
+  background: rgba(201, 168, 76, 0.1);
+  color: var(--gold-ink);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+}
+html.dark .premium-badge {
+  background: rgba(232, 201, 106, 0.1);
+  color: #E8C96A;
+  border: 1px solid rgba(232, 201, 106, 0.2);
+}
+
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+}
+
+input, textarea, select {
+  @apply rounded-lg border bg-white dark:bg-brand-dark text-black dark:text-white px-4 py-2 focus:outline-none focus:ring-2;
+  border-color: rgba(201, 168, 76, 0.3);
+  --tw-ring-color: #C9A84C;
+}
+input::placeholder, textarea::placeholder { @apply text-gray-400; }
+
+@keyframes skeleton-loading {
+  0% { background-position: 1000px 0; }
+  100% { background-position: -1000px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 1000px 100%;
+  animation: skeleton-loading 2s infinite;
+}
+html.dark .skeleton {
+  background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+  background-size: 1000px 100%;
+}
+
+/* ───────── Motion ───────── */
+
+/* One orchestrated page-load moment on the hero: children rise in sequence */
+@keyframes rise {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+.hero-seq > * {
+  opacity: 0;
+  animation: rise 0.7s var(--ease-out) forwards;
+}
+.hero-seq > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-seq > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-seq > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-seq > *:nth-child(4) { animation-delay: 0.35s; }
+.hero-seq > *:nth-child(5) { animation-delay: 0.45s; }
+
+/* Light scroll reveal for card grids (see components/Reveal.tsx).
+   Content stays visible if JavaScript is unavailable. */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Smooth open/close for accordions and menus (animates grid row height) */
+.collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden; /* closed content is not focusable */
+  transition: grid-template-rows 0.3s var(--ease-out), opacity 0.25s var(--ease-out), visibility 0s linear 0.3s;
+}
+.collapse > .collapse-inner { overflow: hidden; min-height: 0; }
+.collapse.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Popover entrance */
+@keyframes pop-in {
+  from { opacity: 0; transform: translate3d(0, 8px, 0) scale(0.97); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+.pop-in { animation: pop-in 0.2s var(--ease-out) both; transform-origin: bottom right; }
+
+/* Horizontal chip rows on phones: scroll, hide the scrollbar */
+.chip-row { scrollbar-width: none; -ms-overflow-style: none; overscroll-behavior-x: contain; }
+.chip-row::-webkit-scrollbar { display: none; }
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .hero-seq > * { opacity: 1; }
+  .js .reveal { opacity: 1; transform: none; }
+  .gold-shimmer { animation: none; }
+}
