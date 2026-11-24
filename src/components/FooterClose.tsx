@@ -3,7 +3,8 @@
 import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-/** The footer's "Need help?" close. The home page already has its own Need help section, so it is left out there. */
+/** The footer's "Need help?" close. Pages with their own closing call (home, reviews, business, visit us) leave it out. */
+const OWN_CLOSE = ['/', '/reviews', '/b2b', '/contact'];
 export function FooterClose({ children }: { children: ReactNode }) {
-  return usePathname() === '/' ? null : <>{children}</>;
+  return OWN_CLOSE.includes(usePathname()) ? null : <>{children}</>;
 }

@@ -5,7 +5,7 @@ import { openChat, waLink } from '@/lib/whatsapp';
 
 type Item = { question: string; answer: string };
 
-/** Searchable questions on native <details> (readable without scripts). No match hands over to WhatsApp or the chat. */
+/** Searchable questions on native <details> (readable without scripts). No match hands over to the team or the assistant. */
 export function FaqSearch({ items, limit }: { items: Item[]; limit?: number }) {
   const [q, setQ] = useState('');
   const [all, setAll] = useState(false);
@@ -47,8 +47,8 @@ export function FaqSearch({ items, limit }: { items: Item[]; limit?: number }) {
         <div className="grid gap-4 py-6 border-t border-[var(--line)]">
           <p className="text-[17px]">No answer for &ldquo;{q}&rdquo; yet. Ask our team directly.</p>
           <div className="btn-row">
-            <a href={waLink(q)} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Ask on WhatsApp</a>
-            <button type="button" onClick={openChat} className="btn btn--secondary">Ask in chat</button>
+            <a href={waLink(q)} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Message us</a>
+            <button type="button" onClick={openChat} className="btn btn--secondary">Ask the assistant</button>
           </div>
         </div>
       )}

@@ -7,7 +7,8 @@ import Lenis from 'lenis';
 export function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const lenis = new Lenis({ duration: 1.1, easing: (t) => 1 - Math.pow(1 - t, 4), anchors: { offset: -72 } });
+    // lerp 0.15: smooth on the wheel but close to native, so scroll-linked media and text keep up
+    const lenis = new Lenis({ lerp: 0.15, anchors: { offset: -72 } });
     let id = requestAnimationFrame(function raf(time) {
       lenis.raf(time);
       id = requestAnimationFrame(raf);

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { TIERS, type Product, type Tier } from '@/config';
-import { ArrowRightIcon } from '@/components/Icons';
 import { formatINR, waLink } from '@/lib/whatsapp';
 import { gradesOf, imageOf, warrantyShort } from '@/lib/products';
 
@@ -60,21 +59,23 @@ export function ProductCard(p: Product) {
           </>
         ) : (
           <p className="text-[12px] sm:text-[14px] text-[var(--ink-soft)]">
-            <span className="font-medium text-[var(--ink)]">{gradeName(grade)}</span> grade · {warrantyShort(grade)}<span className="max-sm:hidden"> warranty</span>
+            <span className="font-medium text-[var(--ink)]">{gradeName(grade)}</span> grade
           </p>
         )}
 
-        <div className="mt-auto flex max-sm:flex-col max-sm:items-start sm:items-center justify-between gap-1 sm:gap-4 pt-3 sm:pt-5 border-t border-[var(--line)]">
-          <p className="text-[17px] sm:text-[22px] font-semibold tracking-[-0.02em] tabular-nums">{formatINR(price)}</p>
+        <div className="mt-auto grid gap-3 pt-3 sm:pt-5 border-t border-[var(--line)]">
+          <div className="flex max-sm:flex-col sm:items-baseline sm:justify-between gap-1 sm:gap-2">
+            <p className="text-[18px] sm:text-[24px] font-semibold tracking-[-0.02em] leading-none tabular-nums">{formatINR(price)}</p>
+            <p className="text-[12px] sm:text-[13px] text-[var(--muted)] whitespace-nowrap">{warrantyShort(grade)} warranty</p>
+          </div>
           <a
             href={waLink(`Hi, is the ${p.name} (${[ram, ssd].filter(Boolean).join(', ')}, ${TIERS[grade].label}, ${formatINR(price)}) available? Please send live photos and the battery report.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="link text-[14px] sm:text-[15px]"
+            className="btn btn--secondary btn--sm w-full"
           >
             Enquire
-            <ArrowRightIcon className="w-4 h-4" />
-            <span className="sr-only"> about {p.name} on WhatsApp</span>
+            <span className="sr-only"> about {p.name}</span>
           </a>
         </div>
       </div>

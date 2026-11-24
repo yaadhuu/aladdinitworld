@@ -150,7 +150,7 @@ export default function WhyCPOPage() {
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {REJECTED.map((r) => (
                 <li key={r} className="flex items-center gap-3 text-[15px]">
-                  <span aria-hidden="true" className="w-5 h-5 rounded-full border border-[var(--line)] inline-flex items-center justify-center text-[11px] text-[var(--ink-soft)] flex-none">✕</span>
+                  <span aria-hidden="true" className="w-5 h-5 rounded-full border border-[var(--line)] inline-flex items-center justify-center text-[var(--ink-soft)] flex-none"><svg viewBox="0 0 12 12" className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"><path d="M3 3l6 6M9 3 3 9" /></svg></span>
                   {r}
                 </li>
               ))}

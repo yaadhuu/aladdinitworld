@@ -34,6 +34,7 @@ export default function ProductsPage() {
   const [sort, setSort] = useState<Sort>('low');
   const [ready, setReady] = useState(false);
   const sheetRef = useRef<HTMLDialogElement>(null);
+  const [q, setQ] = useState('');
 
   const sizes = useMemo(() => [...new Set(ALL_PRODUCTS.map(sizeOf).filter(Boolean))].sort(), []);
   const chips = useMemo(() => [...new Set(ALL_PRODUCTS.map((p) => p.chip))], []);
@@ -59,12 +60,13 @@ export default function ProductsPage() {
   }, [ready, grade, size, chip]);
 
   const list = ALL_PRODUCTS
+    .filter((p) => q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => [p.name, p.chip, ...p.specs].join(' ').toLowerCase().includes(w)))
     .filter((p) => (!grade || (p.tiers[grade]?.price ?? null) !== null) && (!size || sizeOf(p) === size) && (!chip || p.chip === chip))
     .sort((a, b) => (sort === 'low' ? priceOf(a) - priceOf(b) : priceOf(b) - priceOf(a)));
 
   const active = [grade, size, chip].filter((v) => v !== null).length;
-  const filtered = active > 0;
-  const reset = () => { setGrade(null); setSize(null); setChip(null); };
+  const filtered = active > 0 || q !== '';
+  const reset = () => { setGrade(null); setSize(null); setChip(null); setQ(''); };
   const from = Math.min(...ALL_PRODUCTS.map(priceOf));
 
   return (
@@ -73,6 +75,11 @@ export default function ProductsPage() {
         <div className="wrap grid gap-2 sm:gap-4">
           <h1 className="t-h1 !text-[clamp(32px,3vw+22px,64px)]">Shop MacBook</h1>
           <p className="lead max-sm:!text-[15px]">Certified pre-owned MacBook Pro models from {formatINR(from)}. Every price includes the warranty of its grade and our 5-year service plan.</p>
+          <div className="relative max-w-[520px] mt-2 sm:mt-4">
+            <label htmlFor="shop-search" className="sr-only">Search MacBooks</label>
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="absolute left-5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-[var(--muted)]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4 4" /></svg>
+            <input id="shop-search" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search M1 Pro, 16GB, 14-inch" autoComplete="off" className="faq-search" />
+          </div>
         </div>
       </section>
 

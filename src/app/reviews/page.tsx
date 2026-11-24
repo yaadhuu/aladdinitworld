@@ -1,108 +1,78 @@
 import { SITE_CONFIG } from '@/config';
-import { Rating } from '@/components/Rating';
-import { Reveal } from '@/components/Reveal';
-import { ArrowRightIcon, ChatIcon } from '@/components/Icons';
+import { ArrowRightIcon, GoogleIcon } from '@/components/Icons';
+import { waLink } from '@/lib/whatsapp';
 
-// TODO(Yadhu/Ashwin): replace with the real Google reviews link from the Business Profile
+// TODO(owner): replace with the real Google reviews link from the Business Profile
 // (Google Business Profile → "Get more reviews" → share link).
 const GOOGLE_REVIEWS_URL =
-  'https://www.google.com/maps/search/?api=1&query=' +
-  encodeURIComponent('Aladdin IT World, Thamarassery, Kerala');
+  'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Aladdin IT World, Koduvally, Kerala');
 
-function initials(name: string) {
-  return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+function Stars({ n }: { n: number }) {
+  return (
+    <span className="inline-flex gap-0.5" role="img" aria-label={`${n} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <svg key={i} viewBox="0 0 20 20" className="w-4 h-4" aria-hidden="true">
+          <path fill={i < n ? 'var(--ink)' : 'var(--line)'} d="M10 1.6 12.6 7l5.9.6-4.4 4 1.3 5.8L10 14.5l-5.4 2.9 1.3-5.8-4.4-4L7.4 7z" />
+        </svg>
+      ))}
+    </span>
+  );
 }
 
 export default function ReviewsPage() {
+  const { rating, reviews } = SITE_CONFIG.stats;
   return (
-    <div className="min-h-screen bg-white dark:bg-brand-dark">
-
-      <section className="py-12 sm:py-14 px-4 sm:px-6 lg:px-8 border-b border-accent/20 bg-zinc-50 dark:bg-zinc-950">
-        <div className="max-w-7xl mx-auto hero-seq">
-          <p className="eyebrow mb-3">Reviews</p>
-          <h1 className="font-display font-bold text-3xl sm:text-5xl text-black dark:text-white mb-4">
-            What Our Customers Say
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg max-w-2xl">
-            Real reviews from Google Business and direct customer messages. Nothing fabricated — every word here is from a real buyer.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-brand-dark">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col items-center gap-3 mb-10 text-center">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Rating rating={5} />
-              <span className="font-bold text-2xl text-black dark:text-white tabular">{SITE_CONFIG.stats.rating}</span>
-              <span className="text-gray-600 dark:text-gray-400">({SITE_CONFIG.stats.reviews} reviews on Google)</span>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Showing a few featured reviews below — see all {SITE_CONFIG.stats.reviews} on{' '}
-              <a
-                href={GOOGLE_REVIEWS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-accent font-semibold hover:underline"
-              >
-                Google Maps
-                <ArrowRightIcon className="w-3.5 h-3.5" />
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
+    <>
+      <section className="pt-10 sm:pt-20 pb-10 sm:pb-14">
+        <div className="wrap grid gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7 grid gap-3 sm:gap-4">
+            <h1 className="t-h1 !text-[clamp(34px,3vw+22px,64px)]">Reviews from MacBook buyers</h1>
+            <p className="lead">Every review here comes from a real customer, on Google or in a message to our team.</p>
+          </div>
+          <div className="lg:col-span-5 lg:justify-self-end grid gap-3 justify-items-start lg:justify-items-end">
+            <p className="inline-flex items-center gap-3">
+              <GoogleIcon className="w-6 h-6" />
+              <span className="text-[34px] sm:text-[44px] font-semibold tracking-[-0.03em] leading-none tabular-nums">{rating}</span>
+              <span className="text-[15px] text-[var(--ink-soft)] leading-tight">from {reviews}<br />Google reviews</span>
             </p>
-          </div>
-
-          <h2 className="eyebrow text-center mb-8">Featured Reviews</h2>
-
-          <div className="grid sm:grid-cols-2 gap-5 sm:gap-6">
-            {SITE_CONFIG.customerReviews.map((review, idx) => (
-              <Reveal key={idx} delay={(idx % 2) * 80} className="h-full">
-                <figure className="h-full p-6 sm:p-7 rounded-2xl border border-accent/20 bg-white dark:bg-zinc-900 flex flex-col t-ui hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5">
-                  <Rating rating={review.rating} size="sm" />
-                  <blockquote className="text-gray-700 dark:text-gray-400 my-4 text-sm leading-relaxed flex-1">
-                    &ldquo;{review.text}&rdquo;
-                  </blockquote>
-                  <div className="flex items-center justify-between gap-3 pt-4 border-t border-accent/15">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-black flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, #C9A84C, #E8C96A)' }}
-                        aria-hidden="true"
-                      >
-                        {initials(review.name)}
-                      </div>
-                      <figcaption className="min-w-0">
-                        <p className="font-bold text-black dark:text-white text-sm">{review.name}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">{review.role}</p>
-                      </figcaption>
-                    </div>
-                    <span className="text-xs px-2.5 py-1 rounded-full bg-accent/10 text-accent border border-accent/20 flex-shrink-0">
-                      {review.source}
-                    </span>
-                  </div>
-                </figure>
-              </Reveal>
-            ))}
+            <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="link text-[15px]">
+              See all on Google
+              <ArrowRightIcon className="w-4 h-4" />
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
           </div>
         </div>
       </section>
 
-      <section className="py-14 sm:py-16 px-4 sm:px-6 lg:px-8 bg-zinc-50 dark:bg-zinc-950 border-t border-accent/20">
-        <div className="max-w-2xl mx-auto text-center">
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Bought from us? We&apos;d love to hear from you.
-          </p>
-          <a
-            href={SITE_CONFIG.social.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold"
-          >
-            <ChatIcon className="w-5 h-5" />
-            Share Your Experience
-          </a>
+      <section aria-label="Customer reviews" className="py-10 sm:py-20 bg-[var(--surface)]">
+        <ul className="wrap columns-1 md:columns-2 lg:columns-3 gap-4 sm:gap-5">
+          {SITE_CONFIG.customerReviews.map((r) => (
+            <li key={r.name} className="break-inside-avoid mb-4 sm:mb-5">
+              <figure className="card p-6 sm:p-7 gap-4">
+                <Stars n={r.rating} />
+                <blockquote className="text-[16px] leading-[1.6] text-[var(--ink)]">&ldquo;{r.text}&rdquo;</blockquote>
+                <figcaption className="pt-4 border-t border-[var(--line)] text-[14px]">
+                  <span className="font-medium">{r.name}</span>
+                  <span className="text-[var(--muted)]"> · {r.role}, {r.source}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="py-14 sm:py-20">
+        <div className="wrap grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7 grid gap-3">
+            <h2 className="t-h2">Bought a MacBook from us?</h2>
+            <p className="lead">Tell us how it is going. A short message helps the next buyer choose with confidence.</p>
+          </div>
+          <div className="lg:col-span-5 lg:justify-self-end btn-row">
+            <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Review us on Google</a>
+            <a href={waLink('Hi, I bought a MacBook from you and would like to share my experience.')} target="_blank" rel="noopener noreferrer" className="btn btn--secondary">Message us</a>
+          </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

@@ -4,7 +4,7 @@ import { ArrowRightIcon, InstagramIcon, MailIcon, WhatsAppIcon } from '@/compone
 import { Wordmark } from '@/components/Navigation';
 import { ChatButton } from '@/components/ChatButton';
 import { FooterClose } from '@/components/FooterClose';
-import { MAIN_ACTION, waLink } from '@/lib/whatsapp';
+import { waLink } from '@/lib/whatsapp';
 
 const columns = [
   {
@@ -42,7 +42,7 @@ export function Footer() {
             </div>
             <div className="lg:col-span-5 lg:justify-self-end btn-row">
               <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--primary">
-                {MAIN_ACTION} on WhatsApp
+                Contact us
               </a>
               <ChatButton>Ask in chat</ChatButton>
             </div>

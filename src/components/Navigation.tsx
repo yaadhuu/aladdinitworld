@@ -31,26 +31,38 @@ export function Navigation() {
 
   // On the home page the header floats over the dark hero with light text, then turns white
   const [dark, setDark] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menu, setMenu] = useState(false);
+  useEffect(() => { setMenu(false); }, [pathname]);
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMenu(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menu]);
   useEffect(() => {
     const hero = pathname === '/' ? document.getElementById('hero') : null;
     if (!hero) { setDark(false); return; }
-    const check = () => setDark(hero.getBoundingClientRect().bottom > 72);
-    check();
+    // one measurement per frame at most; React skips the render when nothing changed
+    let raf = 0;
+    const measure = () => { raf = 0; setDark(hero.getBoundingClientRect().bottom > 72); setScrolled(window.scrollY > 8); };
+    const check = () => { if (!raf) raf = requestAnimationFrame(measure); };
+    measure();
     window.addEventListener('scroll', check, { passive: true });
     window.addEventListener('resize', check);
-    return () => { window.removeEventListener('scroll', check); window.removeEventListener('resize', check); };
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('scroll', check); window.removeEventListener('resize', check); };
   }, [pathname]);
 
   return (
-    <header data-dark={dark} className="site-header fixed inset-x-0 top-0 z-50 bg-[rgba(255,255,255,0.88)] backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]">
+    <header data-dark={dark && !menu} data-scrolled={scrolled} className="site-header fixed inset-x-0 top-0 z-50 bg-[rgba(255,255,255,0.88)] backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]">
       <div className="wrap h-[var(--nav)] flex items-center justify-between gap-6">
         <Link href="/" aria-label="Aladdin IT World, home" className="text-[var(--ink)]">
           <Wordmark />
         </Link>
 
         <nav aria-label="Main" className="hidden lg:flex items-center gap-9 xl:gap-11">
-          {NAV_LINKS.map((item) => {
-            const active = isActive(item.href);
+          {[{ label: 'Home', href: '/' }, ...NAV_LINKS].map((item) => {
+            const active = item.href === '/' ? pathname === '/' : isActive(item.href);
             return (
               <Link
                 key={item.href}
@@ -66,11 +78,32 @@ export function Navigation() {
           })}
         </nav>
 
-        <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--secondary btn--sm">
-          {MAIN_ACTION}
-          <span className="sr-only"> on WhatsApp</span>
-        </a>
+        <div className="flex items-center gap-1.5">
+          <a data-main-action href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn--secondary btn--sm">
+            {MAIN_ACTION}
+            <span className="sr-only"> on WhatsApp</span>
+          </a>
+          <button type="button" className="menu-btn lg:hidden" aria-expanded={menu} aria-controls="site-menu" aria-label={menu ? 'Close menu' : 'Open menu'} onClick={() => setMenu((m) => !m)}>
+            <svg viewBox="0 0 24 24" className="w-[22px] h-[22px]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true">
+              {menu ? <path d="M6 6l12 12M18 6 6 18" /> : <path d="M4 9h16M4 15h16" />}
+            </svg>
+          </button>
+        </div>
       </div>
+      {menu && (
+        <nav id="site-menu" aria-label="Menu" className="menu-sheet lg:hidden">
+          <ul className="wrap py-2">
+            {[{ label: 'Home', href: '/' }, ...NAV_LINKS].map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} aria-current={(item.href === '/' ? pathname === '/' : isActive(item.href)) ? 'page' : undefined} onClick={() => setMenu(false)}>
+                  {item.label}
+                  <svg viewBox="0 0 20 20" className="w-4 h-4 text-[#6e6e73]" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden="true"><path d="M8 5l5 5-5 5" /></svg>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }

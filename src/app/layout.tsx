@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Geist, Inter } from 'next/font/google';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
-import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ChatWidget } from '@/components/ChatWidget';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { StructuredData } from '@/components/StructuredData';
@@ -11,6 +10,8 @@ import '../styles/globals.css';
 import '../styles/site.css';
 
 // Inter as the fallback under SF Pro (Apple devices): light 400 headlines, 400/500 text, as on the first site
+// Geist: the home hero headline only (semibold)
+const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-geist', weight: ['600'] });
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
 export const metadata: Metadata = {
@@ -48,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${geist.variable}`} suppressHydrationWarning>
       <head>
         <StructuredData />
         {/* The site is light only: a premium retail page keeps one grade (taste skill: dark pages are for tech) */}
@@ -60,7 +61,6 @@ export default function RootLayout({
         {/* The header is fixed; main starts under it (the home hero pulls itself back up to sit beneath it) */}
         <main id="main" className="pt-[var(--nav)]">{children}</main>
         <Footer />
-        <WhatsAppButton />
         <ChatWidget />
         <SmoothScroll />
       </body>

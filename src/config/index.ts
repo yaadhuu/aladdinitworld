@@ -301,32 +301,26 @@ export const SITE_CONFIG = {
 
   features: [
     {
-      icon: "✓",
       title: "100+ Point Inspection",
       description: "Every device is put through a rigorous inspection — battery health, display, keyboard, trackpad, ports, speakers, and full performance testing.",
     },
     {
-      icon: "🛡️",
       title: "Graded Warranty",
       description: "1 month on CPO Refurbished, 3 months on CPO Certified, 6 months on CPO Pristine. Transparent coverage, no surprises.",
     },
     {
-      icon: "🚚",
       title: "Nationwide Delivery",
       description: "Fast, insured shipping across India. Real-time tracking on every order.",
     },
     {
-      icon: "🔒",
       title: "Secure Payments",
       description: "Multiple payment options including EMI. Every transaction is encrypted and secure.",
     },
     {
-      icon: "♻️",
       title: "Circular Economy",
       description: "Every CPO MacBook extends a device's life, reduces e-waste, and saves resources — without compromising on quality.",
     },
     {
-      icon: "👥",
       title: "Expert Support",
       description: "Direct WhatsApp access to our Apple specialists before and after your purchase.",
     },

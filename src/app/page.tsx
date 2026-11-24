@@ -6,7 +6,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { SITE_CONFIG } from '@/config';
-import { ArrowRightIcon, GoogleIcon, MailIcon, PinIcon } from '@/components/Icons';
+import { ArrowRightIcon, GoogleIcon } from '@/components/Icons';
 import { ProductCard } from '@/components/ProductCard';
 import { ChatButton } from '@/components/ChatButton';
 import { ReviewMarquee } from '@/components/home/ReviewMarquee';
@@ -28,10 +28,6 @@ const featured = FEATURED_IDS.map((id) => ALL_PRODUCTS.find((p) => p.id === id))
 const HERO_MOBILE: MediaSet = { basePath: '/hero/m', count: 27, width: 720, height: 900, video: '/hero/video/hero-m.mp4' };
 const HERO_DESKTOP: MediaSet = { basePath: '/hero/d', count: 43, width: 1280, height: 582, video: '/hero/video/hero-d.mp4' };
 
-const lineIcon = 'w-5 h-5 flex-none text-[var(--ink)]';
-const ChatLine = () => (
-  <svg viewBox="0 0 24 24" className={lineIcon} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-10.9 6.7L4 19.5l1.4-4.6A7.5 7.5 0 1 1 20 11.5Z" /></svg>
-);
 
 export default function Home() {
   const { showroom } = SITE_CONFIG;
@@ -44,7 +40,7 @@ export default function Home() {
           desktop={HERO_DESKTOP}
           alt="Two Space Black MacBook Pro laptops, open"
           scrollRange={0.7}
-          className="hero2 min-h-[100svh]"
+          className="hero2 min-h-[70svh] lg:min-h-[100svh]"
           mediaClassName="hero-media"
         >
           <div className="hero2__scrim" aria-hidden="true" />
@@ -52,7 +48,7 @@ export default function Home() {
             <div className="hero2__head" data-enter>
               <h1>Certified pre&#8209;owned MacBooks</h1>
               {/* TODO(owner): warranty, "100+ point inspection" and "5-year service plan" are not confirmed, so they are left out of the hero */}
-              <p className="hero2__lead">Inspected and graded in Kerala. Delivered across India.</p>
+              <p className="hero2__lead">Every MacBook professionally inspected, graded and warranted. <strong>Three CPO tiers</strong> to match your budget.</p>
             </div>
             <div className="hero2__foot">
               <div className="btn-row">
@@ -84,68 +80,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Exchange and e-waste ── */}
+      {/* ── Exchange, with the e-waste figures it leads to ── */}
       <section id="exchange" className="py-14 sm:py-28">
-        <div className="wrap grid gap-6 lg:grid-cols-12">
-          <div className="on-inverse lg:col-span-7 card !bg-black text-[var(--inv-ink)]">
-            <div className="photo !rounded-none aspect-[16/9]">
-              <Image src={PHOTOS.exchange} alt="An open MacBook on an outdoor table among plants" fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover" />
+        <div className="wrap grid gap-8 lg:gap-16 lg:grid-cols-2 lg:items-center">
+          <div className="photo aspect-[4/3]">
+            <Image src={PHOTOS.exchange} alt="An open MacBook on an outdoor table among plants" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          </div>
+          <div className="grid gap-8">
+            <div className="grid gap-4 justify-items-start">
+              <h2 className="t-h2">Exchange your old laptop</h2>
+              <p className="lead">Send its model and a few photos. We tell you its value and take it off the price of your new MacBook.</p>
+              <a href={waLink('Hi, I would like an exchange value for my laptop. Model: ')} target="_blank" rel="noopener noreferrer" className="btn btn--primary mt-2">Get an exchange value</a>
             </div>
-            <div className="p-7 sm:p-10 grid gap-4">
-              <h2 className="t-h2 !max-w-[16ch]">Exchange your old laptop</h2>
-              <p className="text-[17px] leading-[1.6] text-[var(--inv-muted)] max-w-[46ch]">Send its model and a few photos. We give you a value on WhatsApp and take it off the price of your MacBook.</p>
-              <div className="pt-2">
-                <a href={waLink('Hi, I would like an exchange value for my laptop. Model: ')} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Get an exchange value</a>
+            <div className="grid gap-4 pt-8 border-t border-[var(--line)]">
+              <div className="grid gap-2">
+                <h3 className="text-[19px] font-medium tracking-[-0.01em]">Better for the planet, too</h3>
+                <p className="text-[15px] leading-[1.6] text-[var(--ink-soft)] max-w-[52ch]">A MacBook with a second owner is one fewer laptop built and one fewer thrown away. Our totals so far:</p>
               </div>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
+                {SITE_CONFIG.impact.map((f) => (
+                  <div key={f.label} className="grid gap-1 content-start">
+                    <dt className="text-[24px] sm:text-[30px] font-semibold leading-none tracking-[-0.02em] tabular-nums whitespace-nowrap">{f.value}</dt>
+                    <dd className="text-[14px] leading-[1.45] text-[var(--ink-soft)]">{f.label}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-          </div>
-
-          <div className="lg:col-span-5 card card--grey p-7 sm:p-10">
-            <h3 className="t-h3">Pre-owned and e-waste</h3>
-            <p className="text-[16px] leading-[1.6] text-[var(--ink-soft)] mt-3 max-w-[40ch]">A MacBook with a second owner is one fewer laptop built and one fewer thrown away. Our totals so far:</p>
-            <dl className="grid grid-cols-2 gap-x-6 mt-8">
-              {SITE_CONFIG.impact.map((f) => (
-                <div key={f.label} className="py-5 border-t border-[var(--line)] grid gap-1.5 content-start">
-                  <dt className="text-[23px] sm:text-[30px] font-semibold whitespace-nowrap leading-none tracking-[-0.02em] tabular-nums">{f.value}</dt>
-                  <dd className="text-[14px] leading-[1.45] text-[var(--ink-soft)]">{f.label}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </div>
       </section>
 
-      {/* ── Need help: contact routes and questions ── */}
-      <section id="faq" className="py-14 sm:py-28 bg-[var(--surface)] scroll-mt-[var(--nav)]">
-        <div className="wrap grid gap-12 lg:grid-cols-12 lg:gap-6">
-          <div className="lg:col-span-4 grid gap-6 content-start">
-            <div className="grid gap-3">
-              <h2 className="t-h2">Need help?</h2>
-              <p className="lead">Search common questions, or reach the team the way you prefer.</p>
-            </div>
-            <ul className="border-t border-[var(--line)]">
-              <li className="border-b border-[var(--line)]">
-                <a href={waLink()} target="_blank" rel="noopener noreferrer" className="help-row"><ChatLine /><span className="flex-1">Message us on WhatsApp</span><ArrowRightIcon className="w-4 h-4" /></a>
-              </li>
-              <li className="border-b border-[var(--line)] max-lg:hidden">
-                <ChatButton className="help-row w-full text-left"><ChatLine /><span className="flex-1">Ask in chat</span><ArrowRightIcon className="w-4 h-4" /></ChatButton>
-              </li>
-              <li className="border-b border-[var(--line)]">
-                <a href={`mailto:${SITE_CONFIG.social.email}`} className="help-row"><MailIcon className={lineIcon} /><span className="flex-1">Email us</span><ArrowRightIcon className="w-4 h-4" /></a>
-              </li>
-              <li className="border-b border-[var(--line)]">
-                <a href={showroom.mapsUrl} target="_blank" rel="noopener noreferrer" className="help-row items-start"><PinIcon className={`${lineIcon} mt-0.5`} /><span className="flex-1">Visit the showroom<span className="block text-[14px] text-[var(--muted)] mt-0.5">{showroom.lines.slice(0, 2).join(', ')}, Koduvally</span></span><ArrowRightIcon className="w-4 h-4 mt-1" /></a>
-              </li>
-            </ul>
-          </div>
-          <div className="lg:col-span-7 lg:col-start-6">
-            <FaqSearch items={SITE_CONFIG.faqItems} limit={6} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Reviews ── */}
-      <section id="reviews" className="py-14 sm:py-28">
+      {/* ── Reviews, with the ways to reach the team underneath ── */}
+      <section id="reviews" className="py-14 sm:py-28 bg-[var(--surface)]">
         <div className="wrap">
           <div className="sec-head lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7 grid gap-3">
@@ -161,6 +127,27 @@ export default function Home() {
           </div>
         </div>
         <div className="wrap"><ReviewMarquee reviews={SITE_CONFIG.customerReviews} /></div>
+        <div className="wrap mt-10 sm:mt-14 pt-8 border-t border-[var(--line)] grid gap-3 lg:flex lg:items-center lg:justify-between">
+          <p className="text-[19px] font-medium tracking-[-0.01em]">Need help choosing?</p>
+          <div className="flex flex-wrap gap-x-7 gap-y-1">
+            <a href={waLink()} target="_blank" rel="noopener noreferrer" className="link text-[15px]">Message us <ArrowRightIcon className="w-4 h-4" /></a>
+            <ChatButton className="link text-[15px]">Ask the assistant <ArrowRightIcon className="w-4 h-4" /></ChatButton>
+            <a href={showroom.mapsUrl} target="_blank" rel="noopener noreferrer" className="link text-[15px]">Visit the showroom <ArrowRightIcon className="w-4 h-4" /></a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Questions ── */}
+      <section id="faq" className="py-14 sm:py-28 scroll-mt-[var(--nav)]">
+        <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-6">
+          <div className="lg:col-span-4 grid gap-3 content-start">
+            <h2 className="t-h2">Questions, answered</h2>
+            <p className="lead">Warranty, EMI, exchange and delivery. Search below, or ask the assistant anything else.</p>
+          </div>
+          <div className="lg:col-span-7 lg:col-start-6">
+            <FaqSearch items={SITE_CONFIG.faqItems} limit={6} />
+          </div>
+        </div>
       </section>
     </>
   );
