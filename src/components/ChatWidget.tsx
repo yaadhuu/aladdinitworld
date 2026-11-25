@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { SITE_CONFIG } from '@/config';
 import { ArrowRightIcon, CloseIcon, WhatsAppIcon } from '@/components/Icons';
 import { OzyAvatar, type OzyMood } from '@/components/OzyAvatar';
@@ -31,7 +32,13 @@ function parse(text: string) {
   return { body, links, handoff, mood };
 }
 
+// Pages where shoppers choose a MacBook get Ozy's button; the rest (business, visit us, legal) stay quiet.
+// Anywhere, an "Ask the assistant" link can still open the chat.
+const OZY_PAGES = ['/products', '/why-cpo', '/warranty'];
+
 export function ChatWidget() {
+  const path = usePathname();
+  const showLauncher = path === '/' || OZY_PAGES.some((p) => path.startsWith(p));
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([{ from: 'bot', text: GREETING }]);
   const [input, setInput] = useState('');
@@ -98,11 +105,13 @@ export function ChatWidget() {
 
   return (
     <>
-      {/* Launcher: bottom right on every screen */}
-      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="chat-panel"
-        aria-label={open ? 'Close chat with Ozy' : 'Chat with Ozy, our assistant'} className="chat-launcher inline-flex">
-        {open ? <CloseIcon className="w-5 h-5" /> : <OzyAvatar className="w-full h-full" follow />}
-      </button>
+      {/* Launcher: bottom right, on the shopping pages (and whenever the chat is open, so it can close) */}
+      {(showLauncher || open) && (
+        <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="chat-panel"
+          aria-label={open ? 'Close chat with Ozy' : 'Chat with Ozy, our assistant'} className="chat-launcher inline-flex">
+          {open ? <CloseIcon className="w-5 h-5" /> : <OzyAvatar className="w-full h-full" follow />}
+        </button>
+      )}
 
       <div id="chat-panel" role="dialog" aria-modal="false" aria-label="Chat with Ozy" hidden={!open} className="chat-panel">
         <div className="flex items-center gap-2.5 px-4 h-14 border-b border-[var(--line)] flex-none">
