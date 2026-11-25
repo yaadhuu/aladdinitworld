@@ -17,8 +17,10 @@ function cdnLoader({ src, width, quality }: ImageLoaderProps) {
   return src;
 }
 
-export function UnitImage(props: ImageProps) {
+/** A Sanity photo; pass `lqip` (Sanity's blurred preview) to show it while the photo loads */
+export function UnitImage({ lqip, ...props }: ImageProps & { lqip?: string }) {
   const remote = typeof props.src === 'string' && props.src.startsWith('https://');
+  const blur = lqip ? { placeholder: 'blur' as const, blurDataURL: lqip } : {};
   // eslint-disable-next-line jsx-a11y/alt-text -- alt always comes in through props
-  return <Image {...props} loader={remote ? cdnLoader : undefined} />;
+  return <Image {...props} {...blur} loader={remote ? cdnLoader : undefined} />;
 }

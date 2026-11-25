@@ -339,7 +339,7 @@ export const METADATA = {
 
 // ─── UNITS (one per physical MacBook) ─────────────────────────────────────────
 export type UnitStatus = "available" | "reserved" | "sold";
-export type UnitPhoto = { src: string; width: number; height: number };
+export type UnitPhoto = { src: string; width: number; height: number; lqip?: string };
 
 export type Unit = {
   id: string; // 8 characters; the last 8 of the Sanity document id

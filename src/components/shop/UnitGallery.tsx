@@ -15,6 +15,7 @@ export function UnitGallery({ photos, label }: { photos: UnitPhoto[]; label: str
         <UnitImage
           key={main.src}
           src={main.src}
+          lqip={main.lqip}
           width={main.width}
           height={main.height}
           alt={`${label}, photo ${active + 1} of ${photos.length}`}

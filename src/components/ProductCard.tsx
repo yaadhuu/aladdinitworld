@@ -19,6 +19,7 @@ export function ProductCard({ unit: u, priority = false }: { unit: Unit; priorit
       <Link href={href} className="photo block relative aspect-[4/3] !rounded-[var(--r-md)] !bg-[#f0f0f2]" tabIndex={-1} aria-hidden="true">
         <UnitImage
           src={photo.src}
+          lqip={photo.lqip}
           width={photo.width}
           height={photo.height}
           alt=""

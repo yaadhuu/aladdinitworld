@@ -1,5 +1,6 @@
 // Every query has a limit and asks only for the fields the page shows.
-const PHOTO = `{ "src": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height }`;
+// lqip: a tiny blurred preview Sanity makes for every image, shown while the photo loads
+const PHOTO = `{ "src": asset->url, "width": asset->metadata.dimensions.width, "height": asset->metadata.dimensions.height, "lqip": asset->metadata.lqip }`;
 
 // "Other (type it)" in the Studio stores the list value as 0 or "other", and the typed value in a second field
 const BASE = `_id, _createdAt, model, year, grade, battery, cosmetic, price, originalPrice, headline, status,

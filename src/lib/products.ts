@@ -10,7 +10,7 @@ import { idFromSlug, TIER_ORDER, unitSlug } from './unit-helpers';
 export * from './unit-helpers';
 
 // ── Raw shape from Sanity, checked before it reaches a page ──
-type RawPhoto = { src?: unknown; width?: unknown; height?: unknown };
+type RawPhoto = { src?: unknown; width?: unknown; height?: unknown; lqip?: unknown };
 type Raw = Record<string, unknown> & { _id?: unknown; _createdAt?: unknown; photos?: RawPhoto[] | null };
 
 const str = (v: unknown) => (typeof v === 'string' ? v : null);
@@ -20,7 +20,9 @@ function toPhoto(p: RawPhoto): UnitPhoto | null {
   const src = str(p.src);
   // Only Sanity's own image host is accepted
   if (!src || !src.startsWith('https://cdn.sanity.io/')) return null;
-  return { src, width: num(p.width) ?? 1600, height: num(p.height) ?? 1200 };
+  // only a real image data URL is used as the blurred preview
+  const lqip = str(p.lqip);
+  return { src, width: num(p.width) ?? 1600, height: num(p.height) ?? 1200, ...(lqip?.startsWith('data:image/') ? { lqip } : {}) };
 }
 
 function toUnit(r: Raw): Unit | null {
