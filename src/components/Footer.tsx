@@ -19,8 +19,8 @@ const columns = [
     title: 'Support',
     links: [
       { label: 'Warranty and service plan', href: '/warranty' },
-      { label: 'Questions and answers', href: '/#faq' },
-      { label: 'Customer reviews', href: '/reviews' },
+      { label: 'FAQ', href: '/#faq' },
+      { label: 'Customer reviews', href: '/#reviews' },
       { label: 'Contact and hours', href: '/contact' },
     ],
   },
@@ -50,12 +50,12 @@ export function Footer() {
         </FooterClose>
 
         {/* Directory */}
-        <div className="grid gap-x-6 gap-y-8 sm:gap-y-10 grid-cols-2 lg:grid-cols-12">
-          <div className="col-span-2 lg:col-span-4 grid gap-4 content-start">
+        <div className="grid gap-x-5 gap-y-8 sm:gap-x-6 sm:gap-y-10 grid-cols-2 lg:grid-cols-12">
+          <div className="col-span-2 lg:col-span-4 grid gap-3 sm:gap-4 content-start">
             <Link href="/" aria-label="Aladdin IT World, home" className="justify-self-start">
               <Wordmark />
             </Link>
-            <p className="text-[15px] leading-relaxed text-[var(--ink-soft)] max-w-[34ch]">
+            <p className="text-[14px] sm:text-[15px] leading-relaxed text-[var(--ink-soft)] max-w-[34ch]">
               Certified pre-owned MacBooks from Koduvally, Kerala, delivered insured across India.
             </p>
             <div className="flex gap-2 pt-1">
@@ -73,32 +73,32 @@ export function Footer() {
           </div>
 
           {columns.map((col) => (
-            <nav key={col.title} aria-label={col.title} className="lg:col-span-2">
-              <h3 className="label mb-2">{col.title}</h3>
+            <nav key={col.title} aria-label={col.title} className="lg:col-span-2 min-w-0">
+              <h3 className="label mb-1 sm:mb-2">{col.title}</h3>
               <ul>
                 {col.links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="link text-[15px]">{l.label}</Link>
+                    <Link href={l.href} className="link !min-h-[40px] sm:!min-h-[44px] text-[14px] sm:text-[15px] leading-snug">{l.label}</Link>
                   </li>
                 ))}
               </ul>
             </nav>
           ))}
 
-          <div className="col-span-2 lg:col-span-4 grid gap-8 sm:grid-cols-2 content-start">
-            <div>
-              <h3 className="label mb-3">Showroom</h3>
-              <address className="not-italic text-[15px] leading-relaxed">
+          <div className="col-span-2 lg:col-span-4 grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-6 content-start pt-6 border-t border-[var(--line)] lg:pt-0 lg:border-0">
+            <div className="min-w-0">
+              <h3 className="label mb-2 sm:mb-3">Showroom</h3>
+              <address className="not-italic text-[14px] sm:text-[15px] leading-[1.55]">
                 {showroom.lines.map((l) => <span key={l} className="block">{l}</span>)}
               </address>
-              <a href={showroom.mapsUrl} target="_blank" rel="noopener noreferrer" className="link text-[15px] mt-1">
+              <a href={showroom.mapsUrl} target="_blank" rel="noopener noreferrer" className="link !min-h-[40px] text-[14px] sm:text-[15px] mt-1">
                 Get directions
                 <ArrowRightIcon className="w-4 h-4" />
               </a>
             </div>
-            <div>
-              <h3 className="label mb-3">Hours</h3>
-              <dl className="text-[15px] leading-relaxed grid grid-cols-[auto_1fr] gap-x-3">
+            <div className="min-w-0">
+              <h3 className="label mb-2 sm:mb-3">Hours</h3>
+              <dl className="text-[14px] sm:text-[15px] leading-[1.55] grid grid-cols-1 [&>dd]:mb-2 sm:grid-cols-[auto_1fr] sm:gap-x-3 sm:[&>dd]:mb-0">
                 <dt>Mon to Fri</dt><dd className="text-[var(--ink-soft)]">{BUSINESS_HOURS.monday.replace(':00', '').replace(':00', '').replace('AM', 'am').replace('PM', 'pm')}</dd>
                 <dt>Saturday</dt><dd className="text-[var(--ink-soft)]">{BUSINESS_HOURS.saturday.replace(':00', '').replace(':00', '').replace('AM', 'am').replace('PM', 'pm')}</dd>
                 <dt>Sunday</dt><dd className="text-[var(--ink-soft)]">{BUSINESS_HOURS.sunday}</dd>
@@ -108,9 +108,9 @@ export function Footer() {
         </div>
 
         {/* Legal row */}
-        <div className="mt-10 sm:mt-14 pt-5 border-t border-[var(--line)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[13px] text-[var(--ink-soft)]">
+        <div className="mt-10 sm:mt-14 pt-5 pb-16 lg:pb-0 border-t border-[var(--line)] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2 text-[13px] text-[var(--ink-soft)]">
           <p>&copy; {year} Aladdin IT World</p>
-          <div className="flex flex-wrap gap-x-6">
+          <div className="flex flex-wrap gap-x-5 sm:gap-x-6">
             <Link href="/privacy" className="link">Privacy</Link>
             <Link href="/terms" className="link">Terms</Link>
             <span className="inline-flex items-center min-h-[44px]">Photographs via Unsplash</span>

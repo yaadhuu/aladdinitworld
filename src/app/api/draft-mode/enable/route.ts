@@ -21,7 +21,8 @@ export async function GET(request: Request) {
   if (!isValid) return new Response('This preview link is not valid or has expired. Open it again from the Studio.', { status: 401 });
 
   // only pages on this website, never another address
-  const to = redirectTo.startsWith('/') && !redirectTo.startsWith('//') ? redirectTo : '/';
+  // ("/\evil.com" counts too: browsers read a backslash like a slash)
+  const to = /^\/(?![/\\])/.test(redirectTo) && !redirectTo.includes('\\') ? redirectTo : '/';
   (await draftMode()).enable();
   redirect(to);
 }

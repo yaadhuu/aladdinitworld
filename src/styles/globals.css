@@ -27,7 +27,7 @@
   --line: rgba(0, 0, 0, 0.1);
   --inv-line: rgba(255, 255, 255, 0.16);
 
-  --nav: 64px;
+  --nav: 56px;
   --padt: 120px;
   --padb: 72px;
   --gut: 80px;
@@ -76,14 +76,13 @@ a, button, [role="button"], summary, label, select {
 
 /* Headings: balanced line breaks, no orphan words */
 h1, h2, h3 { text-wrap: balance; }
-p { text-wrap: pretty; }
+p, blockquote, figcaption, dd, li { text-wrap: pretty; }
 
 /* Retail type: semibold headlines with optical tracking (SF Pro on Apple devices, Inter elsewhere); light 400 headlines */
 body { letter-spacing: -0.01em; }
-h1 { letter-spacing: -0.035em; line-height: 1.04; font-weight: 400; }
-h2 { letter-spacing: -0.025em; line-height: 1.1; font-weight: 400; }
-h3 { letter-spacing: -0.015em; line-height: 1.25; font-weight: 500; }
-h1.font-bold, h2.font-bold { font-weight: 400; } h3.font-bold { font-weight: 500; }
+h1 { letter-spacing: -0.03em; line-height: 1.06; font-weight: 600; }
+h2 { letter-spacing: -0.022em; line-height: 1.12; font-weight: 600; }
+h3 { letter-spacing: -0.012em; line-height: 1.25; font-weight: 600; }
 
 /* Tabular numbers for prices and counts */
 .tabular { font-variant-numeric: tabular-nums; }
@@ -113,20 +112,10 @@ h1.font-bold, h2.font-bold { font-weight: 400; } h3.font-bold { font-weight: 500
 html:not(.dark) .text-accent,
 html:not(.dark) .hover\:text-accent:hover,
 html:not(.dark) .group:hover .group-hover\:text-accent { color: var(--gold-ink); }
-html:not(.dark) .gradient-text {
-  background: linear-gradient(135deg, #8A6A10 0%, #B8932F 50%, #8A6A10 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
 
 /* Always-black sections keep the bright gold even in light mode */
 html:not(.dark) .on-dark .text-accent,
 html:not(.dark) .on-dark .eyebrow { color: var(--gold); }
-html:not(.dark) .on-dark .gradient-text {
-  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-}
 
 .eyebrow {
   font-size: 0.75rem;
@@ -211,24 +200,6 @@ html.dark .glass-sm {
   border: 1px solid rgba(201, 168, 76, 0.1);
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gold-shimmer {
-  background: linear-gradient(105deg, #0A0A0A 0%, #0A0A0A 30%, #C9A84C 50%, #0A0A0A 70%, #0A0A0A 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shimmer 3s linear infinite;
-}
-
-@keyframes shimmer {
-  to { background-position: 200% center; }
-}
 
 .premium-badge {
   @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium;
@@ -336,5 +307,4 @@ html.dark .skeleton {
   }
   .hero-seq > * { opacity: 1; }
   .js .reveal { opacity: 1; transform: none; }
-  .gold-shimmer { animation: none; }
 }

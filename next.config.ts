@@ -15,7 +15,7 @@ const publicCsp = [
   "font-src 'self' data:",
   "media-src 'self'",
   "connect-src 'self'",
-  "frame-src 'none'",
+  "frame-src https://www.google.com", // the showroom map on /contact only
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",

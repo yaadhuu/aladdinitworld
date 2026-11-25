@@ -18,10 +18,10 @@
 .sec--inverse .lead { color: var(--inv-muted); }
 
 /* ── Type ── */
-.t-h1 { font-size: var(--t-h1); line-height: 1.04; letter-spacing: -0.032em; font-weight: 400; }
-.t-h2 { font-size: var(--t-h2); line-height: 1.08; letter-spacing: -0.026em; font-weight: 400; max-width: 22ch; }
-.t-h3 { font-size: var(--t-h3); line-height: 1.2; letter-spacing: -0.018em; font-weight: 400; }
-.t-card { font-size: 17px; line-height: 1.3; letter-spacing: -0.015em; font-weight: 500; }
+.t-h1 { font-size: var(--t-h1); line-height: 1.06; letter-spacing: -0.03em; font-weight: 600; }
+.t-h2 { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.022em; font-weight: 600; max-width: 22ch; }
+.t-h3 { font-size: var(--t-h3); line-height: 1.25; letter-spacing: -0.015em; font-weight: 600; }
+.t-card { font-size: 17px; line-height: 1.3; letter-spacing: -0.015em; font-weight: 600; }
 .h2 .muted, .t-h2 .muted { color: var(--muted); }
 /* Text people read stays near ink (7:1); --muted is for labels and a heading's grey half only */
 .lead { font-size: var(--t-lead); line-height: 1.5; color: var(--ink-soft); max-width: 46ch; }
@@ -96,13 +96,14 @@
   flex: none; height: 36px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--ink-soft); white-space: nowrap;
   transition: background-color 200ms ease, color 200ms ease, box-shadow 200ms ease;
 }
-.segmented button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.segmented button[aria-pressed="true"], .segmented button[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
 @media (hover: hover) and (pointer: fine) { .segmented button[aria-pressed="false"]:hover { color: var(--ink); } }
 
 .faq-search {
   width: 100%; height: 56px; padding: 0 20px 0 52px !important; border-radius: 999px !important; font-size: 16px;
   border: 1px solid var(--line) !important; background: #fff !important; color: var(--ink) !important;
 }
+.faq-search::placeholder, .chat-input::placeholder { color: var(--muted); opacity: 1; }
 .faq-search:focus { outline: 2px solid var(--ink); outline-offset: 2px; box-shadow: none !important; }
 .faq-plus { position: relative; width: 14px; height: 14px; flex: none; }
 .faq-plus::before, .faq-plus::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; margin-top: -0.75px; background: currentColor; border-radius: 2px; transition: transform 260ms var(--ease-out); }
@@ -152,15 +153,6 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
 .js [data-enter] > *:nth-child(3) { animation-delay: 170ms; }
 .js [data-enter] > *:nth-child(4) { animation-delay: 240ms; }
 .js [data-enter-photo] { animation: enter-photo 1400ms var(--ease-out) both; }
-
-/* ── Review marquee ── */
-.marquee { --gap: 16px; position: relative; overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-.marquee__track { will-change: transform; display: flex; gap: var(--gap); width: max-content; animation: marquee var(--dur, 60s) linear infinite; }
-.marquee--reverse .marquee__track { animation-direction: reverse; }
-.marquee:hover .marquee__track, .marquee[data-paused="true"] .marquee__track { animation-play-state: paused; }
-@keyframes marquee { to { transform: translate3d(calc(-50% - var(--gap) / 2), 0, 0); } }
 
 /* ── Home hero: one dark scene ──
    The laptops (ScrollHero media) are the background; the headline and buttons are real HTML on top.
@@ -229,10 +221,10 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
 :root { --tabbar: 0px; }
 
 /* ── Chat ── */
-@media (max-width: 1023px) { .chat-launcher { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: 48px !important; height: 48px; } }
+@media (max-width: 1023px) { .chat-launcher { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); width: 42px !important; height: 42px; } }
 .chat-launcher {
-  position: fixed; right: 32px; bottom: 32px; z-index: 46; align-items: center; gap: 10px;
-  width: 52px; height: 52px; justify-content: center; border-radius: 999px;
+  position: fixed; right: 28px; bottom: 28px; z-index: 46; align-items: center; gap: 10px;
+  width: 44px; height: 44px; justify-content: center; border-radius: 999px;
   background: var(--ink); color: var(--inv-ink); font-size: 15px; font-weight: 500;
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.4);
   transition: transform 160ms var(--ease-out);
@@ -242,7 +234,7 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
 .chat-panel {
   position: fixed; z-index: 47; display: flex; flex-direction: column; overflow: hidden;
   background: #fff; color: var(--ink);
-  inset: auto 32px 96px auto; width: 380px; height: min(600px, calc(100svh - 140px));
+  inset: auto 28px 84px auto; width: 360px; height: min(580px, calc(100svh - 130px));
   border: 1px solid var(--line); border-radius: var(--r-lg);
   box-shadow: 0 30px 80px -30px rgba(26, 24, 20, 0.35);
   transform-origin: bottom right; animation: chat-in 220ms var(--ease-out);
@@ -257,7 +249,10 @@ details[open] > summary .faq-plus::after { transform: rotate(0deg); }
   flex: 1; min-width: 0; height: 44px; padding: 0 16px; border-radius: 999px;
   border: 1px solid var(--line) !important; background: var(--bg) !important; font-size: 16px; color: var(--ink);
 }
-.chat-input:focus { outline: 2px solid var(--ink); outline-offset: 1px; box-shadow: none; }
+.chat-input { transition: border-color 200ms ease, box-shadow 200ms ease; height: 40px !important; font-size: 15px; }
+.chat-input:focus { outline: none; border-color: var(--ink) !important; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.07); }
+@media (max-width: 1023px) { .chat-input { font-size: 16px; } } /* 16px stops iOS zooming in */
+.chat-list { scroll-behavior: smooth; overscroll-behavior: contain; }
 
 /* ── Lenis ── */
 html.lenis, html.lenis body { height: auto; }
@@ -267,9 +262,6 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (prefers-reduced-motion: reduce) {
   .js [data-enter] > *, .js [data-enter-photo] { animation: none; }
-  .marquee__track { animation: none; flex-wrap: wrap; width: auto; }
-  .marquee { -webkit-mask-image: none; mask-image: none; }
-  .marquee [aria-hidden="true"] { display: none; }
   .sheet[open], .sheet[open]::backdrop { animation: none; }
 }
 
@@ -291,3 +283,168 @@ html.lenis, html.lenis body { height: auto; }
 .chat-typing i:nth-child(2) { animation-delay: 0.15s; } .chat-typing i:nth-child(3) { animation-delay: 0.3s; }
 @keyframes chat-dot { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .chat-typing i { animation: none; } }
+
+/* ── Store listing card: photo tile, then a quiet column of facts ── */
+.pcard__name { background: linear-gradient(currentColor, currentColor) 0 100% / 0% 1px no-repeat; transition: background-size 260ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .pcard:hover .photo img { transform: scale(1.03); }
+  .pcard:hover .pcard__name { background-size: 100% 1px; }
+}
+
+/* ── Spotlight card (adapted from React Bits): a faint light under the pointer ── */
+.spotlight { position: relative; isolation: isolate; transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+.spotlight::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(0, 0, 0, 0.045), transparent 65%); transition: opacity 300ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  .spotlight:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.25); }
+  .spotlight:hover::before { opacity: 1; }
+}
+.spotlight--dark::before { background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, 0.09), transparent 65%); }
+@media (hover: hover) and (pointer: fine) { .spotlight--dark:hover { box-shadow: none; border-color: rgba(255, 255, 255, 0.3); } }
+@media (prefers-reduced-motion: reduce) { .spotlight, .spotlight::before { transition: none; } .spotlight:hover { transform: none; } }
+
+/* ── Warranty page ── */
+/* Grade bars: each fills to its share of six months as it scrolls in; hover darkens it */
+.wbar__track { position: relative; height: 10px; border-radius: 999px; background: #ececf0; overflow: hidden; }
+.wbar__fill { position: absolute; inset: 0 auto 0 0; width: var(--w); border-radius: inherit; background: #86868b; transition: background-color 300ms ease; }
+@media (hover: hover) and (pointer: fine) { .wbar:hover .wbar__fill { background: var(--ink); } }
+/* Five years as five blocks that light up one after another */
+.years { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.years__block { display: grid; gap: 10px; }
+.years__bar { height: 6px; border-radius: 999px; background: var(--inv-ink); transition: opacity 300ms ease; }
+@media (hover: hover) and (pointer: fine) { .years:hover .years__bar { opacity: 0.35; } .years .years__block:hover .years__bar { opacity: 1; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wbar__fill { animation: wbar-grow linear both; animation-timeline: view(); animation-range: cover 5% cover 35%; }
+    .years__bar { transform-origin: left; animation: wbar-grow linear both; animation-timeline: view(); }
+    .years__block:nth-child(1) .years__bar { animation-range: cover 5% cover 20%; }
+    .years__block:nth-child(2) .years__bar { animation-range: cover 10% cover 25%; }
+    .years__block:nth-child(3) .years__bar { animation-range: cover 15% cover 30%; }
+    .years__block:nth-child(4) .years__bar { animation-range: cover 20% cover 35%; }
+    .years__block:nth-child(5) .years__bar { animation-range: cover 25% cover 40%; }
+  }
+}
+@keyframes wbar-grow { from { transform: scaleX(0); } }
+.wbar__fill { transform-origin: left; }
+/* Claim steps: a numbered disc; hover lifts the card */
+.steps__num { width: 32px; height: 32px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--ink); color: #fff; font-size: 14px; font-weight: 600; }
+.steps__item { transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .steps__item:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.25); } }
+@media (prefers-reduced-motion: reduce) { .steps__item:hover { transform: none; } }
+/* ── Visit us ── */
+.reach-list { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.reach-row { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 10px 14px 10px 10px; border-radius: 14px; border: 1px solid var(--line);
+  transition: border-color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out); }
+.reach-row:active { transform: scale(0.98); }
+.reach-row__icon { width: 38px; height: 38px; border-radius: 10px; background: var(--surface); display: inline-flex; align-items: center; justify-content: center; flex: none; transition: background-color 200ms ease, color 200ms ease; }
+.reach-row__arrow { color: var(--muted); transition: transform 200ms var(--ease-out), color 200ms ease; }
+@media (hover: hover) and (pointer: fine) {
+  .reach-row:hover { border-color: var(--ink); }
+  .reach-row:hover .reach-row__icon { background: var(--ink); color: #fff; }
+  .reach-row:hover .reach-row__arrow { transform: translateX(3px); color: var(--ink); }
+}
+@media (max-width: 639px) {
+  .reach-list { grid-template-columns: 1fr; gap: 6px; }
+  .reach-row { min-height: 56px; padding: 8px 14px 8px 8px; }
+  .reach-row__icon { width: 36px; height: 36px; }
+}
+.map-frame { position: relative; overflow: hidden; border-radius: var(--r-lg); background: var(--surface); }
+/* Quiet grey map that comes into colour under the pointer; touch screens get colour straight away */
+@media (hover: hover) and (pointer: fine) {
+  .map-frame iframe { filter: grayscale(1) contrast(1.05); transition: filter 400ms ease; }
+  .map-frame:hover iframe, .map-frame:focus-within iframe { filter: none; }
+}
+.live-dot { position: relative; width: 8px; height: 8px; border-radius: 999px; background: var(--muted); flex: none; }
+.live-dot--open { background: #1a9e4b; }
+.live-dot--open::after { content: ""; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid #1a9e4b; opacity: 0; animation: live-ping 2.4s ease-out infinite; }
+@keyframes live-ping { 0% { transform: scale(0.6); opacity: 0.7; } 100% { transform: scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .live-dot--open::after { animation: none; } }
+.sort-chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px 0 11px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
+  font-size: 13px; font-weight: 500; white-space: nowrap; transition: border-color 200ms ease, transform 120ms var(--ease-out); }
+.sort-chip:active { transform: scale(0.97); }
+@media (hover: hover) and (pointer: fine) { .sort-chip:hover { border-color: var(--ink); } }
+
+/* ── Ozy, the chat assistant ── */
+.chat-action { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px; border-radius: 999px; border: 1px solid var(--line); background: #fff;
+  font-size: 13px; font-weight: 500; color: var(--ink); transition: border-color 200ms ease, background-color 200ms ease, transform 120ms var(--ease-out); }
+.chat-action:active { transform: scale(0.97); }
+.chat-action--primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+@media (hover: hover) and (pointer: fine) { .chat-action:hover { border-color: var(--ink); } .chat-action--primary:hover { background: #3a3a3c; } }
+.chat-msg { animation: chat-msg-in 260ms var(--ease-out); }
+@keyframes chat-msg-in { from { opacity: 0; transform: translateY(6px); } }
+/* Ozy's eyes: a blink now and then, a slow glance, and a shape for each mood; the outer group follows the pointer */
+.ozy__look { transition: transform 260ms var(--ease-out); }
+.ozy__eyes { animation: ozy-glance 9s ease-in-out infinite; }
+.ozy__eye { transform-box: fill-box; transform-origin: center; animation: ozy-blink 5s infinite; transition: transform 300ms var(--ease-out); }
+.ozy--thinking .ozy__eyes { animation: ozy-think 1.6s ease-in-out infinite; }
+.ozy--sorry .ozy__eye { animation: none; }
+.ozy--sorry .ozy__eye--l { transform: translateY(1.5px) rotate(-16deg) scaleY(0.62); }
+.ozy--sorry .ozy__eye--r { transform: translateY(1.5px) rotate(16deg) scaleY(0.62); }
+.ozy--happy .ozy__look path { animation: ozy-pop 420ms var(--ease-out); transform-box: fill-box; transform-origin: center; }
+@keyframes ozy-blink { 0%, 90%, 100% { transform: scaleY(1); } 93% { transform: scaleY(0.12); } }
+@keyframes ozy-glance { 0%, 40%, 100% { transform: translate(0, 0); } 48%, 58% { transform: translate(1.4px, -0.5px); } 66%, 74% { transform: translate(-1.2px, 0); } }
+@keyframes ozy-think { 0%, 100% { transform: translate(-1.6px, -1.4px); } 50% { transform: translate(1.6px, -1.4px); } }
+@keyframes ozy-pop { from { transform: scale(0.6); opacity: 0; } }
+.chat-launcher:has(.ozy) { padding: 0; overflow: visible; background: transparent; box-shadow: 0 10px 28px -10px rgba(0, 0, 0, 0.45); }
+.chat-launcher:has(.ozy) .ozy { border-radius: 999px; }
+/* A soft breath around the launcher, every few seconds */
+.chat-launcher:has(.ozy)::after { content: ""; position: absolute; inset: -4px; border-radius: 999px; border: 1.5px solid rgba(29, 29, 31, 0.35); opacity: 0; animation: ozy-breathe 4s ease-out infinite; pointer-events: none; }
+@keyframes ozy-breathe { 0% { transform: scale(0.92); opacity: 0.7; } 70%, 100% { transform: scale(1.25); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .chat-msg, .ozy__eyes, .ozy__eye, .chat-launcher::after { animation: none !important; } .ozy__look { transition: none; } }
+
+/* ── Business page ── */
+/* A client story as a short timeline: a ringed dot per step on one hairline */
+.case-steps { display: grid; gap: 18px; position: relative; padding-left: 22px; }
+.case-steps::before { content: ""; position: absolute; left: 4px; top: 8px; bottom: 8px; width: 1px; background: var(--line); }
+.case-steps__item { position: relative; display: grid; gap: 4px; }
+.case-steps__item::before { content: ""; position: absolute; left: -22px; top: 6px; width: 9px; height: 9px; border-radius: 999px; background: #fff; border: 2px solid var(--ink); }
+.benefit__icon { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--surface); color: var(--ink); transition: background-color 250ms ease, color 250ms ease; }
+@media (hover: hover) and (pointer: fine) { .benefit:hover .benefit__icon { background: var(--ink); color: #fff; } }
+
+/* ── Grades page: inspection areas picker ── */
+/* Phone: one swipe row of pills. Desktop: a list down the side */
+.insp-list { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * var(--gut)); padding-inline: var(--gut); scroll-padding-inline: var(--gut); }
+.insp-list::-webkit-scrollbar { display: none; }
+.insp-tab { flex: none; display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 8px 0 16px; border-radius: 999px; background: #fff; font-size: 14px; font-weight: 500; color: var(--ink-soft);
+  border: 1px solid transparent; transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease; }
+.insp-tab__n { min-width: 26px; height: 24px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; background: var(--surface); color: var(--ink-soft); }
+.insp-tab[aria-selected="true"] { background: var(--ink); color: #fff; }
+.insp-tab[aria-selected="true"] .insp-tab__n { background: rgba(255,255,255,0.18); color: #fff; }
+@media (hover: hover) and (pointer: fine) { .insp-tab[aria-selected="false"]:hover { color: var(--ink); border-color: var(--line); } }
+@media (min-width: 1024px) {
+  .insp-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0; padding: 0; overflow: visible; align-content: start; }
+  .insp-tab { justify-content: space-between; height: 46px; border-radius: 12px; min-width: 0; }
+}
+.insp-fade { animation: insp-fade 360ms var(--ease-out); }
+@keyframes insp-fade { from { opacity: 0; transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .insp-fade { animation: none; } }
+.cov-row { transition: background-color 200ms ease; }
+@media (hover: hover) and (pointer: fine) { .cov-row:hover { background: var(--surface); } }
+
+/* ── Rail: a snapping row that bleeds to the screen edge; the arrows step it ── */
+.rail { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gut); padding-inline: var(--gut); margin-inline: calc(-1 * var(--gut)); padding-bottom: 4px; scrollbar-width: none; overscroll-behavior-x: contain; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > li { flex: none; scroll-snap-align: start; }
+@media (min-width: 640px) { .rail { gap: 20px; } }
+
+/* ── Review marquee: a slow, endless drift; hover or focus pauses it ── */
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee__track { display: flex; width: max-content; animation: marquee var(--marquee-time, 60s) linear infinite; }
+.marquee__item { flex: none; width: min(80vw, 360px); padding-right: 16px; }
+.marquee:hover .marquee__track, .marquee__track:focus-within, .marquee__track:focus { animation-play-state: paused; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; -webkit-mask-image: none; mask-image: none; scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .marquee__track { animation: none; }
+  .marquee__item { scroll-snap-align: start; }
+  .marquee__item[aria-hidden="true"] { display: none; }
+}
+.round-btn { width: 40px; height: 40px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  transition: border-color 200ms ease, transform 120ms var(--ease-out), opacity 200ms ease; }
+.round-btn:active { transform: scale(0.95); }
+.round-btn:disabled { opacity: 0.35; }
+@media (hover: hover) and (pointer: fine) { .round-btn:not(:disabled):hover { border-color: var(--ink); } }
+
+/* A photo that eases in a little under the pointer (the home exchange photo) */
+@media (hover: hover) and (pointer: fine) { .photo--hover:hover img { transform: scale(1.03); } }

@@ -10,7 +10,6 @@ export const NAV_LINKS = [
   { label: 'MacBooks', href: '/products' },
   { label: 'Grades', href: '/why-cpo' },
   { label: 'Warranty', href: '/warranty' },
-  { label: 'Reviews', href: '/reviews' },
   { label: 'Business', href: '/b2b' },
   { label: 'Visit us', href: '/contact' },
 ];
@@ -18,9 +17,9 @@ export const NAV_LINKS = [
 /** The client's lamp mark beside the name; the footer repeats it */
 export function Wordmark({ className = '' }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`} translate="no">
-      <Image src="/logo.png" alt="" width={517} height={256} priority className="h-7 sm:h-8 w-auto flex-none" />
-      <span className="text-[16px] sm:text-[18px] font-medium leading-none tracking-[-0.02em] whitespace-nowrap">Aladdin IT World</span>
+    <span className={`inline-flex items-center gap-2 ${className}`} translate="no">
+      <Image src="/logo.png" alt="" width={517} height={256} priority className="h-[22px] sm:h-6 w-auto flex-none" />
+      <span className="text-[15px] sm:text-[16px] font-semibold leading-none tracking-[-0.015em] whitespace-nowrap">Aladdin IT World</span>
     </span>
   );
 }
@@ -30,7 +29,8 @@ export function Navigation() {
   const isActive = (href: string) => pathname.startsWith(href);
 
   // On the home page the header floats over the dark hero with light text, then turns white
-  const [dark, setDark] = useState(false);
+  // Start dark on the home page so the first paint already matches the hero (no white flash)
+  const [dark, setDark] = useState(pathname === '/');
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   useEffect(() => { setMenu(false); }, [pathname]);
@@ -68,7 +68,7 @@ export function Navigation() {
                 key={item.href}
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
-                className={`relative py-2 text-[15px] whitespace-nowrap transition-colors duration-200 hover:text-[var(--ink)]
+                className={`relative py-2 text-[14px] whitespace-nowrap transition-colors duration-200 hover:text-[var(--ink)]
                   after:absolute after:left-0 after:right-0 after:-bottom-[3px] after:h-px after:bg-[var(--ink)] after:origin-left after:transition-transform after:duration-300
                   ${active ? 'text-[var(--ink)] font-medium after:scale-x-100' : 'text-[var(--ink-soft)] after:scale-x-0 hover:after:scale-x-100'}`}
               >

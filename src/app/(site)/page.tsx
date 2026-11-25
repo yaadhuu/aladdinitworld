@@ -10,15 +10,17 @@ import { ArrowRightIcon, GoogleIcon } from '@/components/Icons';
 import { ProductCard } from '@/components/ProductCard';
 import { ChatButton } from '@/components/ChatButton';
 import { ReviewMarquee } from '@/components/home/ReviewMarquee';
+import { Rail } from '@/components/Rail';
 import { FaqSearch } from '@/components/home/FaqSearch';
+import { CountUp } from '@/components/home/CountUp';
 import ScrollHero, { type MediaSet } from '@/components/ScrollHero';
 import { waLink } from '@/lib/whatsapp';
-import { getCount, getFeatured } from '@/lib/products';
+import { getFeatured } from '@/lib/products';
 import { getFaqs } from '@/lib/faq';
 import { getReviews } from '@/lib/reviews';
 
 const PHOTOS = {
-  exchange: '/img/home/impact.jpg', // Unsplash 1602080858428-57174f9431cf
+  exchange: '/img/home/exchange.jpg', // Unsplash 1684234737917-5c6f223a8a8f (an older and a newer MacBook side by side)
 };
 
 // Static, rebuilt in the background about every 60 seconds
@@ -32,7 +34,7 @@ const HERO_DESKTOP: MediaSet = { basePath: '/hero/d', count: 43, width: 1280, he
 
 export default async function Home() {
   const { showroom } = SITE_CONFIG;
-  const [featured, count, faqs, reviews] = await Promise.all([getFeatured(), getCount(), getFaqs(), getReviews()]);
+  const [featured, faqs, reviews] = await Promise.all([getFeatured(), getFaqs(), getReviews()]);
   return (
     <>
       {/* ── Hero: one dark scene, the MacBooks close as you scroll (ScrollHero: video, frames or poster) ── */}
@@ -50,7 +52,7 @@ export default async function Home() {
             <div className="hero2__head" data-enter>
               <h1>Certified pre&#8209;owned MacBooks</h1>
               {/* TODO(owner): warranty, "100+ point inspection" and "5-year service plan" are not confirmed, so they are left out of the hero */}
-              <p className="hero2__lead">Every MacBook professionally inspected, graded and warranted. <strong>Three CPO tiers</strong> to match your budget.</p>
+              <p className="hero2__lead">Each MacBook is inspected, graded and covered by a warranty. <strong>Choose from three grades</strong> to suit your budget.</p>
             </div>
             <div className="hero2__foot">
               <div className="btn-row">
@@ -62,33 +64,32 @@ export default async function Home() {
         </ScrollHero>
       </div>
 
-      {/* ── MacBooks in stock: up to 6 featured units from the CMS ── */}
+      {/* ── MacBooks in stock: featured units from the CMS, in a row that grows with the stock ── */}
       {featured.length > 0 && (
-      <section id="stock" className="py-14 sm:py-28 bg-[var(--surface)]">
+      <section id="stock" className="py-14 sm:py-24">
         <div className="wrap">
-          <div className="sec-head lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-8 grid gap-3">
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 mb-7 sm:mb-10">
+            <div className="grid gap-2 sm:gap-3">
               <h2 className="t-h2">MacBooks in stock</h2>
-              <p className="lead">Every price includes the warranty of its grade and our 5-year service plan.</p>
+              <p className="lead max-sm:!text-[15px]">Every price includes the warranty of its grade and our 5-year service plan.</p>
             </div>
-            <Link href="/products" className="link lg:col-span-4 lg:justify-self-end">
-              See all {count} MacBooks
+            <Link href="/products" className="link">
+              See all MacBooks
               <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
-          {/* Phone: a swipe row of store tiles; wider: a grid */}
-          <ul className="max-sm:flex max-sm:overflow-x-auto max-sm:snap-x max-sm:snap-mandatory max-sm:-mx-[var(--gut)] max-sm:px-[var(--gut)] max-sm:scroll-px-[var(--gut)] max-sm:[scrollbar-width:none] gap-3 sm:grid sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((u, i) => <li key={u.id} className={`max-sm:w-[46%] max-sm:flex-none max-sm:snap-start ${i >= 4 ? 'sm:max-lg:hidden' : ''}`}><ProductCard unit={u} /></li>)}
-          </ul>
+          <Rail label="MacBooks" itemClass={`w-[46%] sm:w-[calc((100%-40px)/3)] ${featured.length >= 4 ? 'lg:w-[calc((100%-60px)/4)]' : ''}`}>
+            {featured.map((u) => <ProductCard key={u.id} unit={u} />)}
+          </Rail>
         </div>
       </section>
       )}
 
       {/* ── Exchange, with the e-waste figures it leads to ── */}
-      <section id="exchange" className="py-14 sm:py-28">
+      <section id="exchange" className="py-14 sm:py-28 bg-[var(--surface)]">
         <div className="wrap grid gap-8 lg:gap-16 lg:grid-cols-2 lg:items-center">
-          <div className="photo aspect-[4/3]">
-            <Image src={PHOTOS.exchange} alt="An open MacBook on an outdoor table among plants" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          <div className="photo photo--hover aspect-[4/3]">
+            <Image src={PHOTOS.exchange} alt="An older MacBook beside a newer MacBook Pro on a desk" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
           </div>
           <div className="grid gap-8">
             <div className="grid gap-4 justify-items-start">
@@ -104,7 +105,7 @@ export default async function Home() {
               <dl className="grid grid-cols-2 gap-x-6 gap-y-5">
                 {SITE_CONFIG.impact.map((f) => (
                   <div key={f.label} className="grid gap-1 content-start">
-                    <dt className="text-[24px] sm:text-[30px] font-semibold leading-none tracking-[-0.02em] tabular-nums whitespace-nowrap">{f.value}</dt>
+                    <dt className="text-[24px] sm:text-[30px] font-semibold leading-none tracking-[-0.02em] tabular-nums whitespace-nowrap"><CountUp value={f.value} /></dt>
                     <dd className="text-[14px] leading-[1.45] text-[var(--ink-soft)]">{f.label}</dd>
                   </div>
                 ))}
@@ -114,24 +115,24 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Reviews, with the ways to reach the team underneath ── */}
-      <section id="reviews" className="py-14 sm:py-28 bg-[var(--surface)]">
-        <div className="wrap">
-          <div className="sec-head lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7 grid gap-3">
-              <h2 className="t-h2">Reviews from MacBook buyers</h2>
-              <p className="inline-flex items-center gap-2.5 text-[17px] text-[var(--ink-soft)]">
-                <GoogleIcon className="w-5 h-5" />
-                <span><span className="font-semibold text-[var(--ink)]">{SITE_CONFIG.stats.rating}</span> from {SITE_CONFIG.stats.reviews} Google reviews</span>
-              </p>
-            </div>
-            <div className="lg:col-span-5 lg:justify-self-end">
-              <Link href="/reviews" className="btn btn--secondary">Read all reviews</Link>
-            </div>
+      {/* ── Questions (from the CMS; hidden when there are none) ── */}
+      {faqs.length > 0 && (
+      <section id="faq" className="py-14 sm:py-28 scroll-mt-[var(--nav)]">
+        <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-6">
+          <div className="lg:col-span-4 grid gap-3 content-start">
+            <h2 className="t-h2">FAQ</h2>
+            <p className="lead">Warranty, EMI, exchange and delivery. Search below, or ask the assistant anything else.</p>
+          </div>
+          <div className="lg:col-span-7 lg:col-start-6">
+            <FaqSearch items={faqs} limit={6} />
           </div>
         </div>
-        <div className="wrap"><ReviewMarquee reviews={reviews} /></div>
-        <div className="wrap mt-10 sm:mt-14 pt-8 border-t border-[var(--line)] grid gap-3 lg:flex lg:items-center lg:justify-between">
+      </section>
+      )}
+
+      {/* ── The ways to reach the team ── */}
+      <section aria-label="Need help choosing?" className="pb-14 sm:pb-20">
+        <div className="wrap pt-8 border-t border-[var(--line)] grid gap-3 lg:flex lg:items-center lg:justify-between">
           <p className="text-[19px] font-medium tracking-[-0.01em]">Need help choosing?</p>
           <div className="flex flex-wrap gap-x-7 gap-y-1">
             <a href={waLink()} target="_blank" rel="noopener noreferrer" className="link text-[15px]">Message us <ArrowRightIcon className="w-4 h-4" /></a>
@@ -141,20 +142,20 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Questions (from the CMS; hidden when there are none) ── */}
-      {faqs.length > 0 && (
-      <section id="faq" className="py-14 sm:py-28 scroll-mt-[var(--nav)]">
-        <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-6">
-          <div className="lg:col-span-4 grid gap-3 content-start">
-            <h2 className="t-h2">Questions, answered</h2>
-            <p className="lead">Warranty, EMI, exchange and delivery. Search below, or ask the assistant anything else.</p>
-          </div>
-          <div className="lg:col-span-7 lg:col-start-6">
-            <FaqSearch items={faqs} limit={6} />
-          </div>
+      {/* ── Reviews, last before the footer: the Google rating, then the reviews drifting past ── */}
+      {reviews.length > 0 && (
+      <section id="reviews" aria-labelledby="reviews-title" className="py-12 sm:py-20 bg-[var(--surface)] border-b border-[var(--line)] scroll-mt-[var(--nav)]">
+        <div className="wrap flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-7 sm:mb-10">
+          <h2 id="reviews-title" className="t-h2">Reviews from MacBook buyers</h2>
+          <p className="inline-flex items-center gap-2.5 text-[15px] sm:text-[17px] text-[var(--ink-soft)]">
+            <GoogleIcon className="w-5 h-5" />
+            <span><span className="font-semibold text-[var(--ink)]">{SITE_CONFIG.stats.rating}</span> from {SITE_CONFIG.stats.reviews} Google reviews</span>
+          </p>
         </div>
+        <ReviewMarquee reviews={reviews} />
       </section>
       )}
+
     </>
   );
 }

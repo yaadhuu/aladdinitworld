@@ -24,7 +24,7 @@ export const TIERS: Record<Tier, {
     bg: "bg-orange-500/10",
     border: "border-orange-500/40",
     description:
-      "Fully quality-tested pre-owned units at the best price point. May have repair history or replaced parts. Visible scratches or minor dents possible. Every unit passes our 100+ point inspection.",
+      "Fully tested pre-owned MacBooks at the lowest price. May have repair history, replaced parts, visible scratches or minor dents. Every unit passes our 100+ point inspection.",
     includes: [
       "100+ point quality inspection",
       "Fully functional guarantee",
@@ -46,7 +46,7 @@ export const TIERS: Record<Tier, {
     bg: "bg-accent/10",
     border: "border-accent/40",
     description:
-      "Higher-tier pre-owned units with no dents. Light signs of use may be visible. Serviced exclusively with genuine Apple parts. The sweet spot between quality and value.",
+      "No dents, with only light signs of use. Serviced with genuine Apple parts only.",
     includes: [
       "100+ point quality inspection",
       "Genuine Apple parts only",
@@ -66,7 +66,7 @@ export const TIERS: Record<Tier, {
     bg: "bg-emerald-500/10",
     border: "border-emerald-500/40",
     description:
-      "Like-new condition units. Battery health 90%+. No scratches, no dents, no visible signs of use. The closest you get to buying new — at a fraction of the price.",
+      "Like-new condition with battery health of 90% or more. No scratches, no dents and no visible signs of use.",
     includes: [
       "100+ point quality inspection",
       "Battery health 90% or above",
@@ -307,7 +307,7 @@ export const SITE_CONFIG = {
   impact: [
     { value: "2,000+", label: "MacBooks and devices given a second owner" },
     { value: "5,000+ kg", label: "of e-waste kept out of landfill" },
-    { value: "1,200+ t", label: "of CO₂ saved against building new" },
+    { value: "1,200+ tons", label: "of CO₂ saved against building new" },
     { value: "500,000+ L", label: "of water saved in manufacturing" },
   ],
 };

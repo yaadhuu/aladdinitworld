@@ -1,8 +1,10 @@
 import { waLink } from '@/lib/whatsapp';
+import { SpotlightCard } from '@/components/SpotlightCard';
+import { CaseSwitcher } from '@/components/b2b/CaseSwitcher';
 
 const BENEFITS = [
   { title: 'Bulk pricing', desc: 'Better per-unit pricing as your order grows.' },
-  { title: 'Fast turnaround', desc: 'Your team equipped quickly, without long procurement delays.' },
+  { title: 'Fast turnaround', desc: 'Units ready to ship in days, not weeks.' },
   { title: 'Consistent quality', desc: 'Every unit passes the same inspection, whatever the order size.' },
   { title: 'One point of contact', desc: 'One person for your order, delivery and after-sales needs.' },
 ];
@@ -31,14 +33,22 @@ const CASES = [
 
 const QUOTE_TEXT = "Hi, we're looking for MacBooks for our team. Number of units: , budget per unit: , needed by: ";
 
+// Simple line icons for the four benefits, in the same order
+const ICONS = [
+  <path key='a' d='M4 12.5 11.5 5H19v7.5L11.5 20 4 12.5Z M15 9h.01' />,
+  <path key='b' d='M13 3 5 13.5h6L10 21l9-11.5h-6L13 3Z' />,
+  <path key='c' d='M12 3 5 6v5.5c0 4.2 3 7.8 7 9.5 4-1.7 7-5.3 7-9.5V6l-7-3Z M9 12l2 2 4-4' />,
+  <path key='d' d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M4.5 20a7.5 7.5 0 0 1 15 0' />,
+];
+
 export default function B2BPage() {
   return (
     <>
-      <section className="pt-10 sm:pt-20 pb-12 sm:pb-16">
-        <div className="wrap grid gap-6 lg:grid-cols-12 lg:items-end">
+      <section className="pt-10 sm:pt-20 pb-10 sm:pb-14">
+        <div className="wrap grid gap-5 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8 grid gap-3 sm:gap-4">
             <h1 className="t-h1 !text-[clamp(34px,3vw+22px,64px)] max-w-[16ch]">MacBooks for growing teams</h1>
-            <p className="lead">Bulk pricing, flexible payment terms and dedicated support for startups, colleges and companies.</p>
+            <p className="lead max-w-[52ch]">Bulk pricing, flexible payment terms and dedicated support for startups, colleges and companies.</p>
           </div>
           <div className="lg:col-span-4 lg:justify-self-end">
             <a href={waLink(QUOTE_TEXT)} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Get a bulk quote</a>
@@ -46,61 +56,43 @@ export default function B2BPage() {
         </div>
       </section>
 
+      {/* What teams get: four cards, the icon fills on hover */}
       <section aria-label="What teams get" className="pb-14 sm:pb-24">
-        <ol className="wrap grid gap-x-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="wrap grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {BENEFITS.map((b, i) => (
-            <li key={b.title} className="py-6 border-t border-[var(--line)] grid gap-2 content-start">
-              <p className="label tabular-nums">{String(i + 1).padStart(2, '0')}</p>
-              <h2 className="text-[19px] font-medium tracking-[-0.01em]">{b.title}</h2>
-              <p className="text-[15px] leading-[1.6] text-[var(--ink-soft)]">{b.desc}</p>
+            <li key={b.title}>
+              <SpotlightCard className="benefit h-full rounded-[var(--r-lg)] border border-[var(--line)] p-4 sm:p-6 grid gap-3 content-start">
+                <span className="benefit__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{ICONS[i]}</svg>
+                </span>
+                <h2 className="text-[16px] sm:text-[19px] font-semibold tracking-[-0.01em] leading-snug">{b.title}</h2>
+                <p className="text-[13px] sm:text-[15px] leading-[1.55] text-[var(--ink-soft)]">{b.desc}</p>
+              </SpotlightCard>
             </li>
           ))}
-        </ol>
+        </ul>
       </section>
 
-      <section className="py-14 sm:py-24 bg-[var(--surface)]">
-        <div className="wrap">
-          <div className="sec-head">
-            <h2 className="t-h2">Teams that buy from us</h2>
+      {/* Client stories, one at a time */}
+      <section aria-labelledby="teams" className="py-14 sm:py-24 bg-[var(--surface)]">
+        <div className="wrap grid gap-7 sm:gap-10">
+          <div className="grid gap-2 sm:gap-3">
+            <h2 id="teams" className="t-h2">Teams that buy from us</h2>
             <p className="lead">Two companies, in their own situations.</p>
           </div>
-          <div className="grid gap-5 lg:grid-cols-2">
-            {CASES.map((c) => (
-              <article key={c.client} className="card p-6 sm:p-8 gap-6">
-                <header className="grid gap-1">
-                  <p className="label">{c.meta}</p>
-                  <h3 className="t-h3">{c.client}</h3>
-                </header>
-                <dl className="grid grid-cols-2 gap-4">
-                  {c.facts.map(([v, l]) => (
-                    <div key={l} className="border-t border-[var(--line)] pt-3">
-                      <dt className="text-[24px] sm:text-[28px] font-semibold tracking-[-0.02em] leading-none tabular-nums">{v}</dt>
-                      <dd className="text-[14px] text-[var(--ink-soft)] mt-1.5">{l}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <dl className="grid gap-4">
-                  {c.rows.map(([k, v]) => (
-                    <div key={k} className="grid gap-1">
-                      <dt className="text-[15px] font-medium">{k}</dt>
-                      <dd className="text-[15px] leading-[1.6] text-[var(--ink-soft)]">{v}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </article>
-            ))}
-          </div>
+          <CaseSwitcher cases={CASES} />
         </div>
       </section>
 
-      <section className="py-14 sm:py-24">
+      {/* Close: one dark band */}
+      <section className="py-14 sm:py-24 bg-[var(--inv-bg)] text-[var(--inv-ink)]">
         <div className="wrap grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7 grid gap-3">
             <h2 className="t-h2">Tell us what your team needs</h2>
-            <p className="lead">Send the number of units, a budget range and your timeline on WhatsApp. We reply with a quote.</p>
+            <p className="lead !text-[var(--inv-muted)]">Send the number of units, a budget range and your timeline on WhatsApp. We reply with a quote.</p>
           </div>
           <div className="lg:col-span-5 lg:justify-self-end">
-            <a href={waLink(QUOTE_TEXT)} target="_blank" rel="noopener noreferrer" className="btn btn--primary">Get a bulk quote</a>
+            <a href={waLink(QUOTE_TEXT)} target="_blank" rel="noopener noreferrer" className="btn bg-white text-black hover:bg-[#e8e8ed]">Get a bulk quote</a>
           </div>
         </div>
       </section>

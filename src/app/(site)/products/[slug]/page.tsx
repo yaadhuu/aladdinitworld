@@ -50,12 +50,17 @@ export default async function UnitPage({ params }: Props) {
     <>
       <UnitSchema unit={unit} />
       <section className="pt-6 sm:pt-12 pb-16 sm:pb-28">
+        <nav aria-label="Breadcrumb" className="wrap mb-4 sm:mb-6">
+          <Link href="/products" className="link text-[14px] text-[var(--ink-soft)] !min-h-0 py-2">
+            <ArrowRightIcon className="w-3.5 h-3.5 rotate-180" />
+            All MacBooks
+          </Link>
+        </nav>
         <div className="wrap grid gap-8 lg:gap-14 lg:grid-cols-2 lg:items-start">
           <UnitGallery photos={unit.photos} label={`${name}, ${unitMemory(unit)}`} />
 
           <div className="grid gap-8">
             <div className="grid gap-3 justify-items-start">
-              <Link href="/products" className="link text-[15px]">All MacBooks</Link>
               <p className="label">{unit.chip}{unit.status === 'reserved' ? ' · Reserved' : ''}</p>
               <h1 className="t-h1 !text-[clamp(30px,2.4vw+20px,52px)]">{name}</h1>
               {unit.headline && <p className="text-[17px] sm:text-[19px] font-medium">{unit.headline}</p>}

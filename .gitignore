@@ -8,3 +8,9 @@ out/
 .playwright-cli/
 npm-debug.log*
 .DS_Store
+
+# Local AI tool setups (skills, hooks); not part of the site
+.agents/
+.claude/
+.gemini/
+skills-lock.json
