@@ -39,7 +39,7 @@ The Studio lives in its own folder and its own private git repo, next to this on
    - `npm run build` makes a static site in `dist/` that any static host can serve on your own subdomain (for example `admin.aladdinitworld.com`). Every path must fall back to `index.html`.
 4. Set `STUDIO_URL` in this app's environment. `/admin` on the site then forwards there (read at build time). Without it, `/admin` is a 404.
 
-Roles are set in the Sanity project (Members): CEO as Administrator, sales as Editors. Sales staff see only Stock and Home page featured. Administrators also see Vision and everything else, and are the only ones who can delete. Turn on two-step verification for everyone.
+Roles are set in the Sanity project (Members): CEO as Administrator, sales as Editors. Sales staff see only Stock, Home page featured MacBooks, Customer reviews and Questions. Administrators also see Vision and everything else, and are the only ones who can delete. Turn on two-step verification for everyone.
 
 ## Add a unit
 
@@ -59,7 +59,7 @@ Pages call only `src/lib/products.ts` (`getUnits`, `getFeatured`, `getUnit`, `ge
 
 - One document type, `unit`: one per physical MacBook. Title, URL and warranty are generated from the fields and the grade.
 - Shown on the site: status Available or Reserved, with a price, a grade and at least one photo. Sold units return a 404.
-- Home: up to 6 featured available units, newest first. Shop: up to 60 units, filtered in the browser. Every query has a limit and asks only for the fields it shows.
+- Home: up to 6 available MacBooks picked on the Home page document (`homePage`, an array of references to existing units), in the order staff set. Shop: up to 60 units, filtered in the browser. Every query has a limit and asks only for the fields it shows.
 - Reads are cached for about 60 seconds (`revalidate`), so a sold unit disappears within a minute or two. No webhook is used.
 
 | Page | Rendering |

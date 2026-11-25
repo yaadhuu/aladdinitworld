@@ -2,7 +2,7 @@
 
 **Open the admin:** go to the admin address the CEO gave you (it ends in `.sanity.studio`; bookmark it) and sign in with your own login. Never share your login. Changes show on the website within about 2 minutes.
 
-You will see two things on the left: **Stock** and **Home page featured**.
+You will see these on the left: **Stock**, **Home page: featured MacBooks**, **Customer reviews** and **Questions and answers**.
 
 ## Add a new MacBook
 1. Click **Stock**, then **All MacBooks**, then the **+** (new) button at the top.
@@ -22,8 +22,8 @@ Open it, go to **Price & status**, set **Status** to **Sold**, click **Publish**
 ## Reserve a MacBook
 Set **Status** to **Reserved** and publish. It stays on the website with a "Reserved" tag.
 
-## Show a MacBook on the home page
-Open it, go to **Price & status**, switch on **Show on the home page**, click **Publish**. The home page shows up to 6, newest first. To remove one, switch it off and publish. Check **Home page featured** on the left to see what is chosen.
+## Choose the MacBooks shown on the home page
+Open **Home page: featured MacBooks**. Click **Add item**, search and pick a MacBook that is already in Stock, then **Publish**. You cannot create a new MacBook here. Drag the items to change the order. The home page shows up to 6. To remove one, use the three dots on that item, then **Publish**. A MacBook marked Sold is skipped by itself.
 
 ## If something looks wrong
 - **A MacBook is not on the website:** check its Status is Available or Reserved, it has at least 1 photo, and you clicked Publish. Then wait 2 minutes.

@@ -357,7 +357,6 @@ export type Unit = {
   headline: string | null; // optional short line shown with the name
   originalPrice: number | null; // the price before an offer, shown crossed out
   status: UnitStatus;
-  featured: boolean;
   photos: UnitPhoto[];
   description: string;
   createdAt: string;

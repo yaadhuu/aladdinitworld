@@ -46,7 +46,6 @@ function toUnit(r: Raw): Unit | null {
     battery: num(r.battery),
     cosmetic: str(r.cosmetic),
     included: Array.isArray(r.included) ? r.included.filter((i): i is string => typeof i === 'string') : [],
-    featured: r.featured === true,
     description: str(r.description) ?? '',
     createdAt: str(r._createdAt) ?? '',
   };
@@ -66,7 +65,7 @@ export async function getCount(): Promise<number> {
   return (await sanityFetch<number>(Q_COUNT, {}, true)) ?? 0;
 }
 
-/** Up to 6 featured, available units, newest first, for the home page */
+/** The MacBooks picked on the Home page document (up to 6), in the order staff chose */
 export async function getFeatured(): Promise<Unit[]> {
   return mapUnits((await sanityFetch<Raw[]>(Q_FEATURED, {}, true)) ?? []);
 }
