@@ -1,6 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { SITE_CONFIG, TIERS, BUSINESS_HOURS } from '@/config';
-import { ALL_PRODUCTS, gradesOf, warrantyShort } from '@/lib/products';
+import { getUnits, gradeName, unitMemory, unitName, warrantyShort } from '@/lib/products';
+import { getFaqs, type Faq } from '@/lib/faq';
+import type { Unit } from '@/config';
 
 export const runtime = 'nodejs';
 
@@ -15,19 +17,16 @@ const EXTRA_NOTES: string[] = [];
 
 const inr = (n: number) => `₹${n.toLocaleString('en-IN')}`;
 
-function buildSystemPrompt() {
-  const stock = ALL_PRODUCTS.map((p) => {
-    const grades = gradesOf(p)
-      .map((g) => `${TIERS[g].label.replace('CPO ', '')} ${inr(p.tiers[g]?.price ?? 0)} (${warrantyShort(g)} warranty)`)
-      .join('; ');
-    return `- ${p.name} | ${p.chip} | ${p.specs.join(', ')} | ${grades}`;
-  }).join('\n');
+function buildSystemPrompt(units: Unit[], faqs: Faq[]) {
+  const stock = units.length
+    ? units.map((u) => `- ${unitName(u)} | ${u.chip} | ${unitMemory(u)} | ${gradeName(u.grade)} ${inr(u.price)}${u.originalPrice ? ` (was ${inr(u.originalPrice)})` : ''} (${warrantyShort(u.grade)} warranty)${u.battery !== null ? ` | battery ${u.battery}%` : ''}${u.status === 'reserved' ? ' | reserved' : ''}${u.headline ? ` | ${u.headline}` : ''}`).join('\n')
+    : 'No MacBooks are listed right now. Say so, and suggest messaging the team.';
 
   const grades = Object.values(TIERS)
     .map((t) => `- ${t.label.replace('CPO ', '')}: ${t.description} Includes: ${t.includes.join('; ')}.${t.caveats.length ? ` Note: ${t.caveats.join('; ')}.` : ''}`)
     .join('\n');
 
-  const faq = SITE_CONFIG.faqItems.map((f) => `Q: ${f.question}\nA: ${f.answer}`).join('\n\n');
+  const faq = faqs.map((f) => `Q: ${f.question}\nA: ${f.answer}`).join('\n\n');
   const hours = Object.entries(BUSINESS_HOURS).map(([d, h]) => `${d}: ${h}`).join(', ');
   const { social, showroom } = SITE_CONFIG;
 
@@ -55,7 +54,6 @@ ${faq}
 ${EXTRA_NOTES.length ? `\nOwner notes:\n${EXTRA_NOTES.map((n) => `- ${n}`).join('\n')}` : ''}`;
 }
 
-const SYSTEM = buildSystemPrompt();
 
 // shortcut: in-memory limits per server instance; move to a shared store (e.g. Upstash Redis) when deployed on several instances.
 const WINDOW = 10 * 60_000;
@@ -131,6 +129,8 @@ export async function POST(req: Request) {
   const messages = clean(body);
   if (!messages) return Response.json({ error: 'bad_request' }, { status: 400 });
 
+  const [{ units }, faqs] = await Promise.all([getUnits(), getFaqs()]);
+  const SYSTEM = buildSystemPrompt(units, faqs);
   const client = new Anthropic();
   const encoder = new TextEncoder();
   const SORRY = `Sorry, I could not answer that right now. Please message our team on WhatsApp at ${SITE_CONFIG.social.phone}.`;

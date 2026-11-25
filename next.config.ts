@@ -11,7 +11,7 @@ const publicCsp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://cdn.sanity.io https://res.cloudinary.com https://images.unsplash.com",
+  "img-src 'self' data: blob: https://cdn.sanity.io",
   "font-src 'self' data:",
   "media-src 'self'",
   "connect-src 'self'",
@@ -40,8 +40,6 @@ const nextConfig: NextConfig = {
     // The optimizer only fetches from these hosts. Remote photos are resized by their own CDN (see UnitImage).
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.sanity.io' },
-      { protocol: 'https', hostname: 'res.cloudinary.com' },
-      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },
   redirects: async () => (studioUrl ? [{ source: '/admin/:path*', destination: studioUrl, permanent: false }] : []),

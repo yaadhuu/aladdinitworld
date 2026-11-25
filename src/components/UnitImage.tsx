@@ -2,7 +2,7 @@
 
 import Image, { type ImageLoaderProps, type ImageProps } from 'next/image';
 
-// Remote photos are resized by their own CDN (Sanity, Cloudinary), so the site needs no image server of its own.
+// Photos come from Sanity and are resized by Sanity's own CDN, so the site needs no image server for them.
 // Local files keep Next's default handling.
 function cdnLoader({ src, width, quality }: ImageLoaderProps) {
   const q = quality ?? 75;
@@ -14,7 +14,6 @@ function cdnLoader({ src, width, quality }: ImageLoaderProps) {
     u.searchParams.set('auto', 'format');
     return u.toString();
   }
-  if (src.startsWith('https://res.cloudinary.com/')) return src.replace('/image/upload/', `/image/upload/c_limit,w_${width},q_${q},f_auto/`);
   return src;
 }
 

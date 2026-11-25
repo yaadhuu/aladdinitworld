@@ -362,24 +362,3 @@ export type Unit = {
   description: string;
   createdAt: string;
 };
-
-// FALLBACK SNAPSHOT: shown only when the CMS cannot be reached. Today's stock as of 2026-11-25.
-// Refresh it when stock changes a lot, or a sold unit could reappear during an outage.
-const CLOUD = "https://res.cloudinary.com";
-const unitBase = { year: null, originalPrice: null as number | null, headline: null as string | null, battery: null, cosmetic: null, included: [] as string[], description: "", status: "available" as UnitStatus, createdAt: "2026-11-25T00:00:00Z" };
-export const FALLBACK_UNITS: Unit[] = [
-  { ...unitBase, id: "snap0001", model: "MacBook Pro", screen: 14, chip: "Apple M1 Pro", ram: 16, storage: "512GB", grade: "certified", price: 74999, featured: true,
-    photos: [{ src: `${CLOUD}/dmzx7yiyd/image/upload/v1782070003/20260614_132632.jpg_nol6pd.jpg`, width: 1600, height: 1200 }] },
-  { ...unitBase, id: "snap0002", model: "MacBook Pro", screen: 14, chip: "Apple M1 Pro", ram: 32, storage: "512GB", grade: "refurb", price: 79999, featured: false,
-    photos: [{ src: `${CLOUD}/dmzx7yiyd/image/upload/v1782069884/20260614_132317.jpg_poea9m.jpg`, width: 1600, height: 1200 }] },
-  { ...unitBase, id: "snap0003", model: "MacBook Pro", screen: 14, chip: "Apple M2 Pro", ram: 16, storage: "512GB", grade: "certified", price: 97999, featured: true,
-    photos: [{ src: "/img/standin-apple-silicon-2.jpg", width: 1960, height: 1308 }] },
-  { ...unitBase, id: "snap0004", model: "MacBook Pro", screen: 16, chip: "Apple M1 Pro", ram: 16, storage: "512GB", grade: "certified", price: 81999, featured: false,
-    photos: [{ src: "/img/standin-apple-silicon.jpg", width: 1960, height: 1308 }] },
-  { ...unitBase, id: "snap0005", model: "MacBook Pro", screen: 16, chip: "Apple M1 Pro", ram: 32, storage: "1TB", grade: "certified", price: 94999, featured: false,
-    photos: [{ src: "/img/standin-apple-silicon-3.jpg", width: 1960, height: 1308 }] },
-  { ...unitBase, id: "snap0006", model: "MacBook Pro", screen: 16, chip: "Intel Core i7", ram: 16, storage: "512GB", grade: "certified", price: 41999, featured: true,
-    photos: [{ src: "/img/standin-intel.jpg", width: 1200, height: 800 }] },
-  { ...unitBase, id: "snap0007", model: "MacBook Pro", screen: 16, chip: "Intel Core i9", ram: 16, storage: "1TB", grade: "certified", price: 49999, featured: false,
-    photos: [{ src: "/img/standin-intel-2.jpg", width: 2000, height: 1333 }] },
-];

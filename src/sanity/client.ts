@@ -26,8 +26,8 @@ async function previewing() {
   }
 }
 
-/** One cached read (about 60 seconds). Returns null when Sanity is not set up or cannot be reached. */
-export async function sanityFetch<T>(query: string, params: Record<string, string | number> = {}): Promise<T | null> {
+/** One cached read (about 60 seconds). Returns null when Sanity is not set up; when it cannot be reached, null, or an error if strict. */
+export async function sanityFetch<T>(query: string, params: Record<string, string | number> = {}, strict = false): Promise<T | null> {
   if (!client) return null;
   try {
     if (previewClient && (await previewing())) {
@@ -37,6 +37,8 @@ export async function sanityFetch<T>(query: string, params: Record<string, strin
     return await client.fetch<T>(query, params, { next: { revalidate: 60 } });
   } catch (error) {
     console.error('sanity: fetch failed', error instanceof Error ? error.message : 'unknown error');
+    // strict: let the page fail so the last good version keeps being served (and a build with Sanity down stops)
+    if (strict) throw error;
     return null;
   }
 }

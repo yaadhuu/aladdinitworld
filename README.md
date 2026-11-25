@@ -12,7 +12,7 @@ npm run lint
 npm run build
 ```
 
-With no Sanity project configured, the site runs on the local snapshot (see "How the fallback works").
+With no Sanity project configured, the shop shows "no MacBooks yet" (see "How the fallback works").
 
 ## Environment variables
 
@@ -71,7 +71,7 @@ Pages call only `src/lib/products.ts` (`getUnits`, `getFeatured`, `getUnit`, `ge
 
 ## How the fallback works
 
-If Sanity cannot be reached (or no project id is set), `getUnits`, `getFeatured`, `getUnit` and `getUnitSlugs` serve `FALLBACK_UNITS` from `src/config/index.ts`. An empty but reachable dataset shows "no units", not the snapshot. The snapshot is today's stock and can go stale: refresh it when stock changes a lot, or a sold unit could reappear during an outage. The chatbot still reads the old snapshot through a legacy export in `src/lib/products.ts` until it is connected to the CMS.
+There is no local copy of the MacBooks. Every MacBook and photo lives in Sanity. If Sanity cannot be reached while a page refreshes, the page fails and the last good version keeps being shown (a build with Sanity down stops). With no Sanity settings at all (a fresh local run), the shop shows "no MacBooks yet".
 
 ## Security
 
@@ -79,7 +79,7 @@ If Sanity cannot be reached (or no project id is set), `getUnits`, `getFeatured`
 - The public CSP allows inline scripts because Next adds them to static pages. A nonce would make every page dynamic.
 - The site has no Studio code or Studio packages. `/admin` only redirects to `STUDIO_URL`, and is disallowed in `robots.txt`.
 - CMS text is rendered as plain React text. The one `dangerouslySetInnerHTML` use is JSON-LD built only from numbers and dropdown values, with `<` escaped.
-- Images come from `cdn.sanity.io`, `res.cloudinary.com` and `images.unsplash.com` only.
+- Photos come from `cdn.sanity.io` only. The one local photo is the exchange picture on the home page.
 
 ## Deploying on Cloudflare Workers (OpenNext) later
 
