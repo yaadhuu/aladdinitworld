@@ -305,6 +305,9 @@ export function ozyReply(messages: Turn[], units: Unit[] | null, faqs: Faq[], re
   if (/^(lol|haha+|hehe+|lmao)\W*$/.test(t)) return withMood('happy', 'Glad that made you smile! Anything I can help you find today?');
   if (/^(sorry|my bad|oops)\b/.test(t)) return withMood('happy', 'No worries at all. What can I help you with?');
   if (/\b(bye|goodbye|see you|see ya|take care)\b/.test(t)) return withMood('happy', `Thank you for visiting Aladdin IT World${hi}. We are a WhatsApp message away whenever you need us.`);
+  // Questions about Ozy itself: gender, age, feelings, where it lives
+  if (/\bare you (a )?(male|female|man|woman|boy|girl|guy|lady|he|she)\b|\byour (gender|age)\b|\bhow old are you\b|\bwhere (are you|do you live)\b|\bdo you have feelings\b/.test(t))
+    return withMood('happy', 'I am an AI assistant, so I do not have a gender, an age or a home, just a love for MacBooks. I live right here on the Aladdin IT World website. What can I help you find today?');
   if (/\b(who are you|your name|are you (a )?(bot|human|real|ai|robot)|what are you|who made you|who built you)\b/.test(t))
     return withMood('happy', 'I am not human. I am Ozy, the Aladdin IT World AI assistant. I answer from our live stock, grades and policies, around the clock. For live photos, a battery report or a final price, our team takes over on WhatsApp. [[handoff]]');
   // Simple sums ("what is 2+2"), and off-topic asks: a short polite answer, then back to MacBooks

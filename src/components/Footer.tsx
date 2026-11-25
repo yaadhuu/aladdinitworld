@@ -113,7 +113,6 @@ export function Footer() {
           <div className="flex flex-wrap gap-x-5 sm:gap-x-6">
             <Link href="/privacy" className="link">Privacy</Link>
             <Link href="/terms" className="link">Terms</Link>
-            <span className="inline-flex items-center min-h-[44px]">Photographs via Unsplash</span>
           </div>
         </div>
       </div>
