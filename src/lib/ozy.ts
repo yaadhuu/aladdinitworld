@@ -1,5 +1,6 @@
 /*
-  Ozy's built-in understanding: used when no AI key is configured, or when the AI call fails.
+  Ozy's built-in understanding: every chat reply comes from here. It is completely free; no AI service
+  or API key is involved.
 
   Ozy reads a message the way a good shop assistant would:
   1. It cleans the text and fixes common typos ("warenty", "macbok", "pristin").
