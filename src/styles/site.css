@@ -448,3 +448,16 @@ html.lenis, html.lenis body { height: auto; }
 
 /* A photo that eases in a little under the pointer (the home exchange photo) */
 @media (hover: hover) and (pointer: fine) { .photo--hover:hover img { transform: scale(1.03); } }
+
+/* Store shelf on the home page: compact fixed-width cards; arrows sit on the row's edges, centred on the photos */
+.rail-wrap { position: relative; }
+.rail-item { width: 40%; }
+@media (min-width: 640px) { .rail-item { width: 200px; } }
+@media (min-width: 1024px) { .rail-item { width: 228px; } }
+.rail-arrow { position: absolute; z-index: 2; top: 55px; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.35); }
+@media (min-width: 1024px) { .rail-arrow { top: 66px; } }
+.rail-arrow--prev { left: 0; transform: translateX(-50%); }
+.rail-arrow--next { right: 0; transform: translateX(50%); }
+.rail-arrow--prev:active { transform: translateX(-50%) scale(0.95); }
+.rail-arrow--next:active { transform: translateX(50%) scale(0.95); }
+@media (max-width: 639px) { .rail-arrow { display: none; } }

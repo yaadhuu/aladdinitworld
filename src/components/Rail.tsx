@@ -7,8 +7,9 @@ const Arrow = ({ flip }: { flip?: boolean }) => (
 );
 
 /**
- * A row you swipe on a phone or step through with the arrows. It snaps item by item and grows
- * with the list, so new stock just extends the row. The arrows hide when everything fits.
+ * A store shelf: compact items in one row you swipe on a phone or step through with the arrows at
+ * either side. Each arrow appears only when there is more to see in its direction, so a short row
+ * shows none.
  */
 export function Rail({ label, children, itemClass }: { label: string; children: ReactNode; itemClass: string }) {
   const row = useRef<HTMLUListElement>(null);
@@ -30,20 +31,19 @@ export function Rail({ label, children, itemClass }: { label: string; children: 
     const el = row.current;
     if (!el) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    el.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: reduce ? 'auto' : 'smooth' });
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: reduce ? 'auto' : 'smooth' });
   };
 
-  const fits = edge.start && edge.end;
   return (
-    <div className="grid gap-4 sm:gap-5">
+    <div className="rail-wrap">
       <ul ref={row} onScroll={measure} className="rail" aria-label={label} data-lenis-prevent>
         {Children.map(children, (c) => <li className={itemClass}>{c}</li>)}
       </ul>
-      {!fits && (
-        <div className="flex justify-end gap-2 max-sm:hidden">
-          <button type="button" className="round-btn" onClick={() => step(-1)} disabled={edge.start} aria-label={`Previous ${label}`}><Arrow flip /></button>
-          <button type="button" className="round-btn" onClick={() => step(1)} disabled={edge.end} aria-label={`Next ${label}`}><Arrow /></button>
-        </div>
+      {!edge.start && (
+        <button type="button" className="round-btn rail-arrow rail-arrow--prev" onClick={() => step(-1)} aria-label={`Previous ${label}`}><Arrow flip /></button>
+      )}
+      {!edge.end && (
+        <button type="button" className="round-btn rail-arrow rail-arrow--next" onClick={() => step(1)} aria-label={`Next ${label}`}><Arrow /></button>
       )}
     </div>
   );

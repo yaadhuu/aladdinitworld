@@ -78,7 +78,7 @@ export default async function Home() {
               <ArrowRightIcon className="w-4 h-4" />
             </Link>
           </div>
-          <Rail label="MacBooks" itemClass={`w-[46%] sm:w-[calc((100%-40px)/3)] ${featured.length >= 4 ? 'lg:w-[calc((100%-60px)/4)]' : ''}`}>
+          <Rail label="MacBooks" itemClass="rail-item">
             {featured.map((u) => <ProductCard key={u.id} unit={u} />)}
           </Rail>
         </div>
