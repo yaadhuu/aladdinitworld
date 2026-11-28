@@ -1,7 +1,7 @@
 import { SITE_CONFIG, TIERS, BUSINESS_HOURS, type Unit } from '@/config';
 import { SITE_URL } from '@/lib/seo';
 import { chipShort, unitName, unitSlug } from '@/lib/unit-helpers';
-import { getFaqs } from '@/lib/faq';
+import type { Faq } from '@/lib/faq';
 
 // JSON-LD text is escaped so it can never close the script tag or inject markup: < > & and the two
 // line-separator characters become \u escapes. The only CMS free text that reaches this is the FAQ.
@@ -39,8 +39,8 @@ function openingHours() {
   });
 }
 
-export async function StructuredData() {
-  const faqs = await getFaqs();
+/** The business, on every page */
+export function StructuredData() {
   const { showroom } = SITE_CONFIG;
   const localBusiness = {
     '@context': 'https://schema.org',
@@ -64,38 +64,25 @@ export async function StructuredData() {
     ...(showroom.geo ? { geo: { '@type': 'GeoCoordinates', latitude: showroom.geo.latitude, longitude: showroom.geo.longitude } } : {}),
     openingHoursSpecification: openingHours(),
     areaServed: { '@type': 'Country', name: SITE_CONFIG.areaServed },
-    priceRange: '₹₹',
     sameAs: [SITE_CONFIG.social.instagram],
   };
 
-  const faqSchema = {
+  return <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(localBusiness)} />;
+}
+
+/** The questions shown on the page it is placed on (the home page); pass only the ones that are visible */
+export function FaqSchema({ faqs }: { faqs: Faq[] }) {
+  if (faqs.length === 0) return null;
+  const schema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: faqs.map((item) => ({
       '@type': 'Question',
       name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
-      },
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   };
-
-
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={jsonLd(localBusiness)}
-      />
-      {faqs.length > 0 && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={jsonLd(faqSchema)}
-        />
-      )}
-    </>
-  );
+  return <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)} />;
 }
 
 /** Product data for one unit page */

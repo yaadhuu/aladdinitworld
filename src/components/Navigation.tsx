@@ -15,10 +15,10 @@ export const NAV_LINKS = [
 ];
 
 /** The client's lamp mark beside the name; the footer repeats it */
-export function Wordmark({ className = '' }: { className?: string }) {
+export function Wordmark({ className = '', alt = '' }: { className?: string; alt?: string }) {
   return (
     <span className={`inline-flex items-center gap-2 ${className}`} translate="no">
-      <Image src="/logo.png" alt="" width={517} height={256} priority className="h-[22px] sm:h-6 w-auto flex-none" />
+      <Image src="/logo.png" alt={alt} width={517} height={256} priority className="h-[22px] sm:h-6 w-auto flex-none" />
       <span className="text-[15px] sm:text-[16px] font-semibold leading-none tracking-[-0.015em] whitespace-nowrap">Aladdin IT World</span>
     </span>
   );
@@ -57,7 +57,7 @@ export function Navigation() {
     <header data-dark={dark && !menu} data-scrolled={scrolled} className="site-header fixed inset-x-0 top-0 z-50 bg-[rgba(255,255,255,0.88)] backdrop-blur-xl backdrop-saturate-150 border-b border-[var(--line)]">
       <div className="wrap h-[var(--nav)] flex items-center justify-between gap-6">
         <Link href="/" aria-label="Aladdin IT World, home" className="text-[var(--ink)]">
-          <Wordmark />
+          <Wordmark alt="Aladdin IT World" />
         </Link>
 
         <nav aria-label="Main" className="hidden lg:flex items-center gap-9 xl:gap-11">

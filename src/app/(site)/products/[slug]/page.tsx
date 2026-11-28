@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { SITE_CONFIG } from '@/config';
 import { ArrowRightIcon } from '@/components/Icons';
 import { UnitSchema } from '@/components/StructuredData';
 import { UnitGallery } from '@/components/shop/UnitGallery';
-import { getUnit, getUnitSlugs, gradeName, unitMemory, unitName, unitSlug, warrantyShort } from '@/lib/products';
+import { getUnit, getUnitSlugs, gradeName, photoAlt, unitMemory, unitName, unitSlug, unitSpecs, unitTitle, warrantyShort } from '@/lib/products';
+import { pageMeta } from '@/lib/seo';
 import { formatINR, waLink } from '@/lib/whatsapp';
 
 // Static, rebuilt in the background about every 60 seconds. A unit that is sold or unpublished returns a 404.
@@ -21,12 +21,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const unit = await getUnit((await params).slug);
   if (!unit) return { title: 'MacBook not found | Aladdin IT World', robots: { index: false } };
   const name = unitName(unit);
-  return {
-    title: `${name}, ${unitMemory(unit)} | Aladdin IT World`,
+  const photo = unit.photos[0];
+  return pageMeta({
+    title: `${unitTitle(unit)} | Aladdin IT World`,
+    // same wording as before
     description: `${gradeName(unit.grade)} certified pre-owned ${name} with ${unitMemory(unit)}. ${warrantyShort(unit.grade)} warranty and our 5-year service plan.`,
-    alternates: { canonical: `${SITE_CONFIG.url}/products/${unitSlug(unit)}` },
-    openGraph: { images: [{ url: unit.photos[0].src, width: unit.photos[0].width, height: unit.photos[0].height }] },
-  };
+    path: `/products/${unitSlug(unit)}`,
+    // the main photo, cropped to the 1200x630 social size by Sanity's image CDN
+    image: { url: `${photo.src}?w=1200&h=630&fit=crop&q=80&fm=jpg`, width: 1200, height: 630, alt: photoAlt(unit, 1, unit.photos.length) },
+  });
 }
 
 export default async function UnitPage({ params }: Props) {
@@ -64,19 +67,13 @@ export default async function UnitPage({ params }: Props) {
               <p className="label">{unit.chip}{unit.status === 'reserved' ? ' · Reserved' : ''}</p>
               <h1 className="t-h1 !text-[clamp(30px,2.4vw+20px,52px)]">{name}</h1>
               {unit.headline && <p className="text-[17px] sm:text-[19px] font-medium">{unit.headline}</p>}
-              <p className="lead">{unitMemory(unit)}. {gradeName(unit.grade)} grade.</p>
+              <p className="lead">{gradeName(unit.grade)} grade. {unitSpecs(unit)}.</p>
             </div>
 
             <div className="grid gap-4 pt-6 border-t border-[var(--line)]">
               <div className="flex items-baseline justify-between gap-4">
                 <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 leading-none tabular-nums">
                   <span className="text-[32px] sm:text-[40px] font-semibold tracking-[-0.02em]">{formatINR(unit.price)}</span>
-                  {unit.originalPrice && (
-                    <span className="text-[18px] sm:text-[20px] text-[var(--muted)]">
-                      <span className="sr-only">Was </span>
-                      <del>{formatINR(unit.originalPrice)}</del>
-                    </span>
-                  )}
                 </p>
                 <p className="text-[14px] text-[var(--muted)]">{warrantyShort(unit.grade)} warranty</p>
               </div>

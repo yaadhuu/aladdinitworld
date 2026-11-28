@@ -14,6 +14,7 @@ import { ReviewMarquee } from '@/components/home/ReviewMarquee';
 import { Rail } from '@/components/Rail';
 import { FaqSearch } from '@/components/home/FaqSearch';
 import { CountUp } from '@/components/home/CountUp';
+import { FaqSchema } from '@/components/StructuredData';
 import ScrollHero, { type MediaSet } from '@/components/ScrollHero';
 import { waLink } from '@/lib/whatsapp';
 import { getFeatured } from '@/lib/products';
@@ -26,6 +27,9 @@ const PHOTOS = {
 
 // Static, rebuilt in the background about every 60 seconds
 export const revalidate = 60;
+
+// How many questions the home page shows (the rest are behind "Show all"); the same ones go in the FAQ structured data
+const FAQ_SHOWN = 6;
 
 // Frame folders under /public/hero, with the scrub-ready videos (tier 1). The last frames (the closed pair turning) are cut:
 // videos trimmed to 84 frames, frame counts set to match (originals in _backup-hero-v2).
@@ -125,13 +129,14 @@ export default async function Home() {
       {/* ── Questions (from the CMS; hidden when there are none) ── */}
       {faqs.length > 0 && (
       <section id="faq" className="py-14 sm:py-28 scroll-mt-[var(--nav)]">
+        <FaqSchema faqs={faqs.slice(0, FAQ_SHOWN)} />
         <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-4 grid gap-3 content-start">
             <h2 className="t-h2">FAQ</h2>
             <p className="lead">Warranty, EMI, exchange and delivery. Search below, or ask the assistant anything else.</p>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
-            <FaqSearch items={faqs} limit={6} />
+            <FaqSearch items={faqs} limit={FAQ_SHOWN} />
           </div>
         </div>
       </section>

@@ -7,10 +7,10 @@ import { SmoothScroll } from '@/components/SmoothScroll';
 import { PreviewBanner } from '@/components/PreviewBanner';
 import { StructuredData } from '@/components/StructuredData';
 import { Analytics } from '@/components/Analytics';
-import { INDEXABLE } from '@/lib/seo';
+import { DEFAULT_OG_IMAGE, INDEXABLE, SITE_URL } from '@/lib/seo';
 import { METADATA, SITE_CONFIG } from '@/config';
-import '../../styles/globals.css';
-import '../../styles/site.css';
+import '../styles/globals.css';
+import '../styles/site.css';
 
 // Inter as the fallback under SF Pro (Apple devices): light 400 headlines, 400/500 text, as on the first site
 // Geist: the home hero headline only (semibold)
@@ -18,21 +18,23 @@ const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-gei
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_CONFIG.url),
+  // set once here, for every route (the opengraph-image and icon routes too)
+  metadataBase: new URL(SITE_URL),
   title: METADATA.title,
   description: METADATA.description,
-  keywords: METADATA.keywords.join(', '),
   openGraph: {
     title: METADATA.title,
     description: METADATA.description,
     type: 'website',
     locale: 'en_IN',
     siteName: SITE_CONFIG.name,
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: METADATA.title,
     description: METADATA.description,
+    images: [DEFAULT_OG_IMAGE.url],
   },
   // index only on a build that is meant to be found (SEO_INDEX=1, see lib/seo.ts)
   robots: {

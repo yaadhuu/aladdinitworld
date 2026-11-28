@@ -28,6 +28,15 @@ export const unitSlug = (u: Pick<Unit, 'model' | 'chip' | 'screen' | 'ram' | 'st
 /** The unit id at the end of a URL part, or null if it does not look like one */
 export const idFromSlug = (slug: string) => slug.match(/-([a-z0-9]{8})$/)?.[1] ?? null;
 
-/** Alt text for a photo, built from the fields so staff never type it */
+/** Alt text for a photo, built from the fields so staff never type it: name, specs, photo number */
 export const photoAlt = (u: Pick<Unit, 'model' | 'chip' | 'screen' | 'ram' | 'storage'>, n: number, total: number) =>
-  `${unitName(u)}, ${unitMemory(u)}${total > 1 ? `, photo ${n} of ${total}` : ''}`;
+  `${unitName(u)}, ${unitMemory(u)}, photo ${n}${total > 1 ? ` of ${total}` : ''}`;
+
+/** RAM and storage as plain words, for the cards and the unit page */
+export const unitSpecs = (u: Pick<Unit, 'ram' | 'storage'>) => `${u.ram}GB RAM · ${u.storage} storage`;
+
+/** Page title for a unit: "{Model}, {RAM}/{Storage}, {Grade}". A part that is missing is left out, never invented. */
+export const unitTitle = (u: Pick<Unit, 'model' | 'ram' | 'storage' | 'grade'>) =>
+  [u.model, [u.ram ? `${u.ram}GB` : '', u.storage].filter(Boolean).join('/'), u.grade ? gradeName(u.grade) : '']
+    .filter(Boolean)
+    .join(', ') || 'MacBook';

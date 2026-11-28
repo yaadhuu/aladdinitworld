@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Unit } from '@/config';
 import { UnitImage } from '@/components/UnitImage';
 import { formatINR, waLink } from '@/lib/whatsapp';
-import { gradeName, photoAlt, unitMemory, unitName, unitSlug, warrantyShort } from '@/lib/unit-helpers';
+import { gradeName, photoAlt, unitMemory, unitName, unitSlug, unitSpecs, warrantyShort } from '@/lib/unit-helpers';
 
 /**
  * One MacBook as a store listing: the photo on its own tile, then the facts in a quiet column
@@ -12,7 +12,9 @@ export function ProductCard({ unit: u, priority = false }: { unit: Unit; priorit
   const href = `/products/${unitSlug(u)}`;
   const photo = u.photos[0];
   const name = unitName(u);
-  const facts = [unitMemory(u), u.battery !== null ? `Battery ${u.battery}%` : null].filter(Boolean).join(' · ');
+  // Two MacBooks can share a name, so each card says its grade, RAM and storage in words, plus its own condition note
+  const specs = `${gradeName(u.grade)} grade · ${unitSpecs(u)}`;
+  const condition = [u.cosmetic, u.battery !== null ? `Battery ${u.battery}%` : null].filter(Boolean).join(' · ');
 
   return (
     <article className="pcard flex h-full flex-col">
@@ -33,22 +35,17 @@ export function ProductCard({ unit: u, priority = false }: { unit: Unit; priorit
       </Link>
 
       <div className="flex flex-1 flex-col pt-3 sm:pt-4">
-        <p className="text-[12px] sm:text-[13px] text-[var(--muted)]">{u.chip} · {gradeName(u.grade)}</p>
+        <p className="text-[12px] sm:text-[13px] text-[var(--muted)]">{u.chip}</p>
         <h3 className="mt-1 text-[15px] sm:text-[16px] font-semibold leading-snug tracking-[-0.01em]">
           <Link href={href} className="pcard__name">{name}</Link>
         </h3>
         {u.headline && <p className="mt-1 text-[12px] sm:text-[13px] font-medium text-[var(--ink)]">{u.headline}</p>}
-        <p className="mt-1 text-[13px] sm:text-[14px] leading-snug text-[var(--ink-soft)]">{facts}</p>
+        <p className="mt-1 text-[13px] sm:text-[14px] leading-snug text-[var(--ink-soft)]">{specs}</p>
+        {condition && <p className="mt-0.5 text-[12px] sm:text-[13px] leading-snug text-[var(--muted)]">{condition}</p>}
 
         <div className="mt-auto pt-3">
           <p className="flex flex-wrap items-baseline gap-x-2 tabular-nums">
             <span className="text-[17px] sm:text-[19px] font-semibold tracking-[-0.015em]">{formatINR(u.price)}</span>
-            {u.originalPrice && (
-              <span className="text-[12px] sm:text-[13px] text-[var(--muted)]">
-                <span className="sr-only">Was </span>
-                <del>{formatINR(u.originalPrice)}</del>
-              </span>
-            )}
           </p>
           <p className="mt-0.5 text-[12px] sm:text-[13px] text-[var(--muted)]">{warrantyShort(u.grade)} warranty</p>
           <a

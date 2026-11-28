@@ -30,8 +30,9 @@ export function FaqSearch({ items, limit }: { items: Item[]; limit?: number }) {
         <div className="faq border-t border-[var(--line)]">
           {shown.map((it) => (
             <details key={it.question} className="border-b border-[var(--line)]" open={q !== '' && shown.length <= 2}>
-              <summary className="flex items-center justify-between gap-6 py-5 text-[17px] font-medium leading-snug">
-                {it.question}
+              <summary className="flex items-center justify-between gap-6 py-5">
+                {/* a real heading (the question), styled as before */}
+                <h3 className="text-[17px] font-medium leading-snug tracking-normal [text-wrap:wrap]">{it.question}</h3>
                 <span aria-hidden="true" className="faq-plus" />
               </summary>
               <p className="pb-6 pr-10 text-[16px] leading-[1.65] text-[var(--ink-soft)] max-w-[64ch]">{it.answer}</p>

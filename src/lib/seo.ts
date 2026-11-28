@@ -11,30 +11,20 @@ export const SITE_URL = SITE_CONFIG.url.replace(/\/$/, '');
  */
 export const INDEXABLE = process.env.SEO_INDEX === '1';
 
+/** The site's social image (app/opengraph-image.tsx), used by every page that has no photo of its own */
+export const DEFAULT_OG_IMAGE = { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: SITE_CONFIG.name };
+
 /** Title, description and canonical (plus matching Open Graph and Twitter text) for one page */
-export function pageMeta({ title, description, path }: { title: string; description: string; path: string }): Metadata {
+export function pageMeta({ title, description, path, image }: {
+  title: string; description: string; path: string; image?: { url: string; width: number; height: number; alt: string };
+}): Metadata {
   const url = `${SITE_URL}${path}`;
+  const img = image ?? DEFAULT_OG_IMAGE;
   return {
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', locale: 'en_IN', siteName: SITE_CONFIG.name },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, url, type: 'website', locale: 'en_IN', siteName: SITE_CONFIG.name, images: [img] },
+    twitter: { card: 'summary_large_image', title, description, images: [img.url] },
   };
 }
-
-/**
- * When each page's own content last changed (the date of its last git commit). Update a date when you
- * change that page. /products and the home page also follow the newest MacBook change (see sitemap.ts).
- */
-export const PAGE_MODIFIED: Record<string, string> = {
-  '': '2026-11-26T05:24:56+05:30',
-  '/products': '2026-11-25T04:46:33+05:30',
-  '/why-cpo': '2026-11-26T05:03:59+05:30',
-  '/warranty': '2026-11-26T05:03:59+05:30',
-  '/reviews': '2026-11-25T04:46:33+05:30',
-  '/b2b': '2026-11-26T05:03:59+05:30',
-  '/contact': '2026-11-26T05:03:59+05:30',
-  '/privacy': '2026-11-25T04:46:33+05:30',
-  '/terms': '2026-11-25T04:46:33+05:30',
-};
