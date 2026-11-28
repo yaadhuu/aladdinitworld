@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRightIcon } from '@/components/Icons';
-import { UnitSchema } from '@/components/StructuredData';
+import { BreadcrumbSchema, UnitSchema } from '@/components/StructuredData';
+import { ProductCard } from '@/components/ProductCard';
 import { UnitGallery } from '@/components/shop/UnitGallery';
-import { getUnit, getUnitSlugs, gradeName, photoAlt, unitMemory, unitName, unitSlug, unitSpecs, unitTitle, warrantyShort } from '@/lib/products';
+import { getUnit, getUnits, getUnitSlugs, gradeName, photoAlt, unitMemory, unitName, unitSlug, unitSpecs, unitTitle, warrantyShort } from '@/lib/products';
 import { pageMeta } from '@/lib/seo';
 import { formatINR, waLink } from '@/lib/whatsapp';
 
@@ -37,6 +38,11 @@ export default async function UnitPage({ params }: Props) {
   if (!unit) notFound();
 
   const name = unitName(unit);
+  // up to four other MacBooks at the nearest prices, so every MacBook page links on to more
+  const more = (await getUnits()).units
+    .filter((u) => u.id !== unit.id)
+    .sort((a, b) => Math.abs(a.price - unit.price) - Math.abs(b.price - unit.price))
+    .slice(0, 4);
   const rows: [string, string | null][] = [
     ['Model', unit.model],
     ['Screen', `${unit.screen}-inch`],
@@ -52,12 +58,16 @@ export default async function UnitPage({ params }: Props) {
   return (
     <>
       <UnitSchema unit={unit} />
+      <BreadcrumbSchema items={[{ name: 'Home', path: '' }, { name: 'MacBooks', path: '/products' }, { name, path: `/products/${unitSlug(unit)}` }]} />
       <section className="pt-6 sm:pt-12 pb-16 sm:pb-28">
         <nav aria-label="Breadcrumb" className="wrap mb-4 sm:mb-6">
-          <Link href="/products" className="link text-[14px] text-[var(--ink-soft)] !min-h-0 py-2">
-            <ArrowRightIcon className="w-3.5 h-3.5 rotate-180" />
-            All MacBooks
-          </Link>
+          <ol className="flex flex-wrap items-center gap-x-2 text-[14px] text-[var(--ink-soft)]">
+            <li><Link href="/" className="link !min-h-0 py-2">Home</Link></li>
+            <li aria-hidden="true"><ArrowRightIcon className="w-3 h-3 text-[var(--muted)]" /></li>
+            <li><Link href="/products" className="link !min-h-0 py-2">MacBooks</Link></li>
+            <li aria-hidden="true"><ArrowRightIcon className="w-3 h-3 text-[var(--muted)]" /></li>
+            <li aria-current="page" className="text-[var(--ink)] truncate max-w-[60vw]">{name}</li>
+          </ol>
         </nav>
         <div className="wrap grid gap-8 lg:gap-14 lg:grid-cols-2 lg:items-start">
           <UnitGallery photos={unit.photos} label={`${name}, ${unitMemory(unit)}`} />
@@ -110,6 +120,23 @@ export default async function UnitPage({ params }: Props) {
           </div>
         </div>
       </section>
+
+      {more.length > 0 && (
+        <section aria-labelledby="more-title" className="pb-16 sm:pb-24">
+          <div className="wrap grid gap-6 sm:gap-8">
+            <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+              <h2 id="more-title" className="t-h3">More MacBooks</h2>
+              <Link href="/products" className="link">
+                See all MacBooks
+                <ArrowRightIcon className="w-4 h-4" />
+              </Link>
+            </div>
+            <ul className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-4">
+              {more.map((m) => <li key={m.id}><ProductCard unit={m} /></li>)}
+            </ul>
+          </div>
+        </section>
+      )}
     </>
   );
 }

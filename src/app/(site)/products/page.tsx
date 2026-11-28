@@ -7,7 +7,7 @@ export const revalidate = 60;
 
 export const metadata = pageMeta({
   title: 'Shop Certified Pre-Owned MacBooks | Aladdin IT World',
-  description: 'Certified pre-owned MacBooks, each inspected, graded and warranted. Filter by grade, size and processor.',
+  description: 'Certified pre-owned MacBooks, each inspected, graded and warranted. Filter by grade, size and processor; every MacBook shows its price and specs.',
   path: '/products',
 });
 

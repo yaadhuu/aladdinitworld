@@ -85,6 +85,16 @@ export function FaqSchema({ faqs }: { faqs: Faq[] }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)} />;
 }
 
+/** The breadcrumb trail shown at the top of a page, as structured data: [{ name, path }], last item is the page itself */
+export function BreadcrumbSchema({ items }: { items: { name: string; path: string }[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it.name, item: `${SITE_URL}${it.path}` })),
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schema)} />;
+}
+
 /** Product data for one unit page */
 export function UnitSchema({ unit: u }: { unit: Unit }) {
   const schema = {

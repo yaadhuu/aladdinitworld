@@ -3,7 +3,7 @@ import { SITE_CONFIG, TIERS } from '@/config';
 
 export const metadata = pageMeta({
   title: "Terms and Conditions | Aladdin IT World",
-  description: "The terms for buying from Aladdin IT World, including warranty and service terms.",
+  description: "The terms for buying from Aladdin IT World, including warranty and service terms. Read them before you buy a MacBook.",
   path: "/terms",
 });
 

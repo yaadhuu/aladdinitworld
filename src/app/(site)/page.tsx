@@ -159,10 +159,16 @@ export default async function Home() {
       <section id="reviews" aria-labelledby="reviews-title" className="py-12 sm:py-20 bg-[var(--surface)] border-b border-[var(--line)] scroll-mt-[var(--nav)]">
         <div className="wrap flex flex-wrap items-end justify-between gap-x-6 gap-y-2 mb-7 sm:mb-10">
           <h2 id="reviews-title" className="t-h2">Reviews from MacBook buyers</h2>
-          <p className="inline-flex items-center gap-2.5 text-[15px] sm:text-[17px] text-[var(--ink-soft)]">
-            <GoogleIcon className="w-5 h-5" />
-            <span><span className="font-semibold text-[var(--ink)]">{SITE_CONFIG.stats.rating}</span> from {SITE_CONFIG.stats.reviews} Google reviews</span>
-          </p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+            <p className="inline-flex items-center gap-2.5 text-[15px] sm:text-[17px] text-[var(--ink-soft)]">
+              <GoogleIcon className="w-5 h-5" />
+              <span><span className="font-semibold text-[var(--ink)]">{SITE_CONFIG.stats.rating}</span> from {SITE_CONFIG.stats.reviews} Google reviews</span>
+            </p>
+            <Link href="/reviews" className="link">
+              Read all reviews
+              <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
         <ReviewMarquee reviews={reviews} />
       </section>

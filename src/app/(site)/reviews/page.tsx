@@ -26,7 +26,7 @@ function Stars({ n }: { n: number }) {
 
 export const metadata = pageMeta({
   title: "Reviews from MacBook Buyers | Aladdin IT World",
-  description: "What buyers say about their MacBook from Aladdin IT World in Koduvally, Kerala.",
+  description: "Read reviews from MacBook buyers of Aladdin IT World in Koduvally, Kerala, including their ratings and where each review was written.",
   path: "/reviews",
 });
 

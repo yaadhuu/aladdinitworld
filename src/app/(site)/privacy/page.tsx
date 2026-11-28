@@ -3,7 +3,7 @@ import { SITE_CONFIG } from '@/config';
 
 export const metadata = pageMeta({
   title: "Privacy Policy | Aladdin IT World",
-  description: "How Aladdin IT World collects, uses and protects your information.",
+  description: "How Aladdin IT World handles your information when you visit the website, message us or buy a MacBook. Read the full privacy policy.",
   path: "/privacy",
 });
 

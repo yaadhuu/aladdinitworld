@@ -21,7 +21,7 @@ const columns = [
     links: [
       { label: 'Warranty and service plan', href: '/warranty' },
       { label: 'FAQ', href: '/#faq' },
-      { label: 'Customer reviews', href: '/#reviews' },
+      { label: 'Customer reviews', href: '/reviews' },
       { label: 'Contact and hours', href: '/contact' },
     ],
   },
