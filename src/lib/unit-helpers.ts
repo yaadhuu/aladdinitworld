@@ -35,8 +35,15 @@ export const photoAlt = (u: Pick<Unit, 'model' | 'chip' | 'screen' | 'ram' | 'st
 /** RAM and storage as plain words, for the cards and the unit page */
 export const unitSpecs = (u: Pick<Unit, 'ram' | 'storage'>) => `${u.ram}GB RAM · ${u.storage} storage`;
 
-/** Page title for a unit: "{Model}, {RAM}/{Storage}, {Grade}". A part that is missing is left out, never invented. */
-export const unitTitle = (u: Pick<Unit, 'model' | 'ram' | 'storage' | 'grade'>) =>
-  [u.model, [u.ram ? `${u.ram}GB` : '', u.storage].filter(Boolean).join('/'), u.grade ? gradeName(u.grade) : '']
+/**
+ * Page title for a unit: "{Model} {screen}" {Chip}, {RAM}/{Storage}, {Grade}". Chip and screen size are in so that
+ * MacBooks with the same model, memory and grade still get different titles. A part that is missing is left out, never invented.
+ */
+export const unitTitle = (u: Pick<Unit, 'model' | 'chip' | 'screen' | 'ram' | 'storage' | 'grade'>) =>
+  [
+    [u.model, u.chip ? chipShort(u.chip) : '', u.screen ? `${u.screen}"` : ''].filter(Boolean).join(' '),
+    [u.ram ? `${u.ram}GB` : '', u.storage].filter(Boolean).join('/'),
+    u.grade ? gradeName(u.grade) : '',
+  ]
     .filter(Boolean)
     .join(', ') || 'MacBook';
