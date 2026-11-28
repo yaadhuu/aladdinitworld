@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 import { SITE_CONFIG } from '@/config';
 import { ArrowRightIcon, MailIcon, PhoneIcon, PinIcon, WhatsAppIcon } from '@/components/Icons';
 import { ShowroomHours } from '@/components/ShowroomHours';
@@ -5,6 +6,12 @@ import { waLink } from '@/lib/whatsapp';
 
 // Google's keyless embed of the same search the "Get directions" link opens
 const MAP_EMBED = 'https://www.google.com/maps?q=E.C.+Building,+Koduvally+Bus+Stand,+Koduvally,+Kerala&z=17&output=embed';
+
+export const metadata = pageMeta({
+  title: "Visit Us or Get in Touch | Aladdin IT World",
+  description: "Find our showroom at E.C. Building, Koduvally Bus Stand, Kerala, check opening hours, or message us on WhatsApp.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   const { phone, email } = SITE_CONFIG.social;

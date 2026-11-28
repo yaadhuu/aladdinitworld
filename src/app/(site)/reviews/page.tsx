@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 import { SITE_CONFIG } from '@/config';
 import { ArrowRightIcon, GoogleIcon } from '@/components/Icons';
 import { waLink } from '@/lib/whatsapp';
@@ -22,6 +23,12 @@ function Stars({ n }: { n: number }) {
     </span>
   );
 }
+
+export const metadata = pageMeta({
+  title: "Reviews from MacBook Buyers | Aladdin IT World",
+  description: "What buyers say about their MacBook from Aladdin IT World in Koduvally, Kerala.",
+  path: "/reviews",
+});
 
 export default async function ReviewsPage() {
   const { rating, reviews } = SITE_CONFIG.stats;

@@ -1,4 +1,11 @@
+import { pageMeta } from '@/lib/seo';
 import { SITE_CONFIG, TIERS } from '@/config';
+
+export const metadata = pageMeta({
+  title: "Terms and Conditions | Aladdin IT World",
+  description: "The terms for buying from Aladdin IT World, including warranty and service terms.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

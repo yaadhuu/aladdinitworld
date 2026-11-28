@@ -1,13 +1,11 @@
 import { MetadataRoute } from 'next';
-import { SITE_CONFIG } from '@/config';
+import { INDEXABLE, SITE_URL } from '@/lib/seo';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/api/', '/admin'],
-    },
-    sitemap: `${SITE_CONFIG.url}/sitemap.xml`,
+    // Crawling stays open everywhere so search engines can read the noindex on previews and vercel.app
+    // (blocking them here would hide it). The sitemap is offered only when this build may be indexed.
+    rules: { userAgent: '*', allow: '/', disallow: ['/api/', '/admin'] },
+    ...(INDEXABLE ? { sitemap: `${SITE_URL}/sitemap.xml` } : {}),
   };
 }

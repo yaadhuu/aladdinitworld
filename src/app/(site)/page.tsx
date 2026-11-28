@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 /*
   Home. Visual thesis: the MacBook on black, then a calm white and grey retail store around it.
   Gold lives only in the lamp mark. One primary action per screen.
@@ -31,6 +32,12 @@ export const revalidate = 60;
 const HERO_MOBILE: MediaSet = { basePath: '/hero/m', count: 27, width: 720, height: 900, video: '/hero/video/hero-m.mp4' };
 const HERO_DESKTOP: MediaSet = { basePath: '/hero/d', count: 43, width: 1280, height: 582, video: '/hero/video/hero-d.mp4' };
 
+
+export const metadata = pageMeta({
+  title: "Certified Pre-Owned MacBooks in Kerala | Aladdin IT World",
+  description: "Certified pre-owned MacBooks in three grades, each inspected and covered by a warranty. Visit our Koduvally showroom or get insured delivery across India.",
+  path: "",
+});
 
 export default async function Home() {
   const { showroom } = SITE_CONFIG;

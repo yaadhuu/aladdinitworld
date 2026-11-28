@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 import { waLink } from '@/lib/whatsapp';
 import { SpotlightCard } from '@/components/SpotlightCard';
 import { CaseSwitcher } from '@/components/b2b/CaseSwitcher';
@@ -40,6 +41,12 @@ const ICONS = [
   <path key='c' d='M12 3 5 6v5.5c0 4.2 3 7.8 7 9.5 4-1.7 7-5.3 7-9.5V6l-7-3Z M9 12l2 2 4-4' />,
   <path key='d' d='M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z M4.5 20a7.5 7.5 0 0 1 15 0' />,
 ];
+
+export const metadata = pageMeta({
+  title: "MacBooks for Teams and Businesses | Aladdin IT World",
+  description: "Bulk pricing, flexible payment terms and dedicated support for startups, colleges and companies buying MacBooks.",
+  path: "/b2b",
+});
 
 export default function B2BPage() {
   return (

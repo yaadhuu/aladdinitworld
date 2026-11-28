@@ -6,6 +6,8 @@ import { ChatWidget } from '@/components/ChatWidget';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { PreviewBanner } from '@/components/PreviewBanner';
 import { StructuredData } from '@/components/StructuredData';
+import { Analytics } from '@/components/Analytics';
+import { INDEXABLE } from '@/lib/seo';
 import { METADATA, SITE_CONFIG } from '@/config';
 import '../../styles/globals.css';
 import '../../styles/site.css';
@@ -25,14 +27,16 @@ export const metadata: Metadata = {
     description: METADATA.description,
     type: 'website',
     locale: 'en_IN',
+    siteName: SITE_CONFIG.name,
   },
   twitter: {
     card: 'summary_large_image',
     title: METADATA.title,
     description: METADATA.description,
   },
+  // index only on a build that is meant to be found (SEO_INDEX=1, see lib/seo.ts)
   robots: {
-    index: true,
+    index: INDEXABLE,
     follow: true,
   },
 };
@@ -64,6 +68,7 @@ export default function RootLayout({
         <Footer />
         <PreviewBanner />
         <ChatWidget />
+        <Analytics />
         <SmoothScroll />
       </body>
     </html>

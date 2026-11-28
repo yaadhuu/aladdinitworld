@@ -4,6 +4,7 @@ import { ArrowRightIcon, InstagramIcon, MailIcon, WhatsAppIcon } from '@/compone
 import { Wordmark } from '@/components/Navigation';
 import { ChatButton } from '@/components/ChatButton';
 import { FooterClose } from '@/components/FooterClose';
+import { CookieSettings } from '@/components/Analytics';
 import { waLink } from '@/lib/whatsapp';
 
 const columns = [
@@ -113,6 +114,7 @@ export function Footer() {
           <div className="flex flex-wrap gap-x-5 sm:gap-x-6">
             <Link href="/privacy" className="link">Privacy</Link>
             <Link href="/terms" className="link">Terms</Link>
+            <CookieSettings />
           </div>
         </div>
       </div>

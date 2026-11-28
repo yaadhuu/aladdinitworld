@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 import Link from 'next/link';
 import { ArrowRightIcon, CheckIcon } from '@/components/Icons';
 import { GradeCards } from '@/components/GradeCards';
@@ -40,6 +41,12 @@ const COMPARE: [string, string, string][] = [
 ];
 
 const REJECTED = ['Activation Lock present', 'MDM enrolment found', 'Find My still on', 'Cracked screen or body', 'Any failed diagnostic', 'Liquid damage or corrosion'];
+
+export const metadata = pageMeta({
+  title: "How We Grade Every MacBook | Aladdin IT World",
+  description: "See how each MacBook is inspected and graded Refurbished, Certified or Pristine, with the checks, criteria and warranty for each grade.",
+  path: "/why-cpo",
+});
 
 export default function WhyCPOPage() {
   return (

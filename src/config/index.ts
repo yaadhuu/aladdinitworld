@@ -151,6 +151,8 @@ export const SITE_CONFIG = {
   url: "https://aladdinitworld.com",
   locale: "en-IN",
   region: "Kerala, India",
+  // Where we deliver: any address in India (the delivery FAQ). Used for areaServed in the structured data.
+  areaServed: "India",
 
   social: {
     whatsapp: "https://wa.me/919136922696",
@@ -166,6 +168,9 @@ export const SITE_CONFIG = {
     locality: "Koduvally",
     region: "Kerala",
     postalCode: "673572",
+    // TODO(owner): the showroom's exact coordinates, e.g. { latitude: 0, longitude: 0 }. In Google Maps, right-click the
+    // pin and click the numbers to copy them. Until set, no geo is put in the structured data (nothing is guessed).
+    geo: null as { latitude: number; longitude: number } | null,
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=E.C.+Building+Koduvally+Bus+Stand+Koduvally+Kerala",
   },
 

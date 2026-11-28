@@ -1,4 +1,11 @@
+import { pageMeta } from '@/lib/seo';
 import { SITE_CONFIG } from '@/config';
+
+export const metadata = pageMeta({
+  title: "Privacy Policy | Aladdin IT World",
+  description: "How Aladdin IT World collects, uses and protects your information.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Unit } from '@/config';
 import { UnitImage } from '@/components/UnitImage';
 import { formatINR, waLink } from '@/lib/whatsapp';
-import { gradeName, unitMemory, unitName, unitSlug, warrantyShort } from '@/lib/unit-helpers';
+import { gradeName, photoAlt, unitMemory, unitName, unitSlug, warrantyShort } from '@/lib/unit-helpers';
 
 /**
  * One MacBook as a store listing: the photo on its own tile, then the facts in a quiet column
@@ -22,7 +22,7 @@ export function ProductCard({ unit: u, priority = false }: { unit: Unit; priorit
           lqip={photo.lqip}
           width={photo.width}
           height={photo.height}
-          alt=""
+          alt={photoAlt(u, 1, 1)}
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
           className="absolute inset-0 w-full h-full object-cover"
           priority={priority}

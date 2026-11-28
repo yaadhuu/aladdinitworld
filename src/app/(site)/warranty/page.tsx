@@ -1,3 +1,4 @@
+import { pageMeta } from '@/lib/seo';
 import { TIERS, EXTENDED_SERVICE_PLAN, WARRANTY_TERMS, type Tier } from '@/config';
 import { CheckIcon } from '@/components/Icons';
 import { SpotlightCard } from '@/components/SpotlightCard';
@@ -24,6 +25,12 @@ const STEPS = [
   ['Repair or replacement', 'We repair or replace the faulty part.'],
   ['Back to you', 'Tested again and returned, usually in 5 to 7 working days.'],
 ];
+
+export const metadata = pageMeta({
+  title: "Warranty and 5-Year Service Plan | Aladdin IT World",
+  description: "Base warranty by grade (1, 3 or 6 months), the 5-year service plan on every MacBook, how a claim works and the full terms.",
+  path: "/warranty",
+});
 
 export default function WarrantyPage() {
   return (

@@ -461,3 +461,13 @@ html.lenis, html.lenis body { height: auto; }
 .rail-arrow--prev:active { transform: translateX(-50%) scale(0.95); }
 .rail-arrow--next:active { transform: translateX(50%) scale(0.95); }
 @media (max-width: 639px) { .rail-arrow { display: none; } }
+
+/* Cookie choice (only when tracking is set up): bottom left, clear of the chat button */
+.consent { position: fixed; z-index: 45; left: 16px; bottom: 16px; width: min(360px, calc(100vw - 32px)); padding: 16px; border-radius: var(--r-lg); background: #fff; border: 1px solid var(--line);
+  box-shadow: 0 20px 50px -24px rgba(0, 0, 0, 0.35); display: grid; gap: 8px; animation: chat-in 220ms var(--ease-out); }
+.consent__title { font-size: 15px; font-weight: 600; }
+.consent__text { font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+.consent__buttons { display: flex; gap: 8px; margin-top: 4px; }
+.consent__buttons .btn { flex: 1; }
+@media (max-width: 1023px) { .consent { left: 12px; right: 72px; width: auto; bottom: calc(12px + env(safe-area-inset-bottom)); } }
+@media (prefers-reduced-motion: reduce) { .consent { animation: none; } }
